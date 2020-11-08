@@ -1,0 +1,18 @@
+{
+  "folders": [
+    {
+      "path": "."
+    }
+  ],
+  "settings": {
+    "editor.wordWrap": "on",
+    "editor.codeActionsOnSave": {
+      "source.organizeImports": true
+    },
+    "editor.formatOnSave": true,
+    "editor.parameterHints.enabled": true,
+    "editor.trimAutoWhitespace": true,
+    "terminal.integrated.fontFamily": "Meslo LG M DZ for Powerline",
+    "javascript.implicitProjectConfig.experimentalDecorators": true
+  }
+}
