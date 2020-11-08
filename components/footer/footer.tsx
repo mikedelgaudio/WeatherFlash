@@ -9,13 +9,12 @@ export class Footer extends Component {
   render() {
     return (
       <footer className={styles.footer}>
-        <a
-          href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          HELLO WORLD
-        </a>
+        <p className="m-0">
+          Developed by{" "}
+          <a href="https://github.com/mikedelgaudio" target="_blank">
+            Mike DelGaudio
+          </a>
+        </p>
       </footer>
     );
   }
