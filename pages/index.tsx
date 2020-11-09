@@ -1,7 +1,7 @@
 import Head from "next/head";
-import { Component } from "react";
+import React, { Component } from "react";
 import { Footer } from "../components/footer/footer";
-import HeroBanner from "../components/hero-banner/hero-banner";
+import WelcomeHeroBanner from "../components/welcome-hero-banner/welcome-hero-banner";
 import styles from "../styles/Home.module.scss";
 
 export default class Home extends Component {
@@ -18,9 +18,7 @@ export default class Home extends Component {
         </Head>
 
         <main className={styles.main}>
-          <h1 className={styles.title}>WeatherFlash</h1>
-
-          <HeroBanner />
+          <WelcomeHeroBanner />
         </main>
 
         <Footer />

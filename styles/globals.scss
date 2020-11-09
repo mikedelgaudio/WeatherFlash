@@ -6,11 +6,15 @@ body {
     Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
 }
 
-a {
-  color: inherit;
-  text-decoration: none;
-}
-
 * {
   box-sizing: border-box;
+}
+
+:root {
+  --link-blue: #0077b6;
+}
+
+a {
+  color: var(--link-blue);
+  text-decoration: none;
 }
