@@ -1,4 +1,4 @@
-.search {
+.searchForm {
   input[type="text"] {
     width: 25%;
     border: none;
@@ -10,7 +10,6 @@
   }
   input[type="text"]:focus {
     color: var(--dark-bg);
-    outline: none;
   }
 
   label {
@@ -18,8 +17,7 @@
     position: absolute;
   }
 
-  .btn-outline-dark {
-    outline: none;
+  button {
     border: none;
     border-bottom: 2px solid var(--light-gray);
     border-radius: 0;
