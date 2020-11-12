@@ -1,3 +1,5 @@
+import { faSun } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Component } from "react";
 import Search from "../search/search";
 import styles from "./welcome-hero-banner.module.scss";
@@ -10,12 +12,18 @@ export default class WelcomeHeroBanner extends Component {
   public render() {
     return (
       <div className="container">
-        <h1 className={styles.title}>WeatherFlash</h1>
-        <h2 className={styles.header}>Your weather update, in a flash!</h2>
-        <h3>To get started, allow location in your browser or type a city</h3>
-        <div>
-          <Search />
+        <div className="d-flex m-0">
+          <h1 className={styles.title}>WeatherFlash</h1>
+          <span>
+            <FontAwesomeIcon icon={faSun} className={styles.icon} />
+          </span>
         </div>
+
+        <div>
+          <h2 className={styles.subtitle}>Your weather update, in a flash!</h2>
+        </div>
+
+        <Search />
       </div>
     );
   }
