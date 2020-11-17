@@ -1,13 +1,27 @@
 import Head from "next/head";
 import React, { Component } from "react";
 import { Footer } from "../components/footer/footer";
+import Search from "../components/search/search";
 import WelcomeHeroBanner from "../components/welcome-hero-banner/welcome-hero-banner";
 import styles from "../styles/Home.module.scss";
 
-export default class Home extends Component {
+interface HomeProps {}
+
+interface HomeState {
+  weatherLookup: string;
+}
+
+export default class Home extends Component<HomeProps, HomeState> {
   constructor(props: any) {
     super(props);
+    this.state = {
+      weatherLookup: "",
+    };
   }
+
+  update = (weatherLookup) => {
+    this.setState({ weatherLookup: weatherLookup });
+  };
 
   public render() {
     return (
@@ -18,7 +32,11 @@ export default class Home extends Component {
         </Head>
 
         <main className={styles.main}>
-          <WelcomeHeroBanner />
+          <div className="container">
+            <WelcomeHeroBanner />
+            <Search onWeatherLookup={this.update} />
+            <h2>You have {this.state.weatherLookup}.</h2>
+          </div>
         </main>
 
         <Footer />

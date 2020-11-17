@@ -3,11 +3,26 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Component } from "react";
 import styles from "./search.module.scss";
 
-class Search extends Component {
+interface SearchProps {
+  onWeatherLookup: Function;
+}
+
+interface SearchState {
+  placeholder: string;
+  weatherLookup: string;
+}
+
+class Search extends Component<SearchProps, SearchState> {
   constructor(props) {
     super(props);
+    this.state = {
+      weatherLookup: "",
+      placeholder: "Allow location or type city",
+      //geolocation: {},
+    };
 
     this.handleSearch = this.handleSearch.bind(this);
+    this.handleUserInput = this.handleUserInput.bind(this);
     this.findLocation = this.findLocation.bind(this);
   }
 
@@ -24,7 +39,6 @@ class Search extends Component {
 
   handleSearch(e) {
     const elementID = e.currentTarget.id;
-    console.log(elementID);
     if (elementID === "location") {
       //Grab Location
       console.log("Requested Click on Location");
@@ -32,11 +46,16 @@ class Search extends Component {
     } else {
       //Search City
       console.log("Requested Click on City");
-      this.state.weatherLookup;
+      this.handleWeatherLookup(this.state.weatherLookup);
     }
   }
 
-  handleWeatherLookupChange(e) {
+  handleWeatherLookup = (location) => {
+    console.log(location);
+    this.props.onWeatherLookup(location);
+  };
+
+  handleUserInput(e) {
     this.setState({ weatherLookup: e.target.value });
   }
 
@@ -49,15 +68,15 @@ class Search extends Component {
       <div className={styles.searchForm}>
         <form>
           <div className="input-group">
-            <label htmlFor="weatherLookup">Allow location or type city</label>
+            <label htmlFor="weatherLookup">{this.state.placeholder}</label>
             <input
               name="weatherLookup"
               id="weatherLookup"
               type="text"
               className="form-control"
-              placeholder="Allow location or type city"
+              placeholder={this.state.placeholder}
               value={this.state.weatherLookup}
-              onChange={this.handleWeatherLookup}
+              onChange={this.handleUserInput}
             />
 
             <div className="input-group-append">
