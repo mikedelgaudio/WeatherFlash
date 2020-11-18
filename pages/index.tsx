@@ -8,14 +8,20 @@ import styles from "../styles/Home.module.scss";
 interface HomeProps {}
 
 interface HomeState {
-  weatherLookup: string;
+  weatherLookup: {
+    city: string;
+    location: {};
+  };
 }
 
 export default class Home extends Component<HomeProps, HomeState> {
   constructor(props: any) {
     super(props);
     this.state = {
-      weatherLookup: "",
+      weatherLookup: {
+        city: "",
+        location: {},
+      },
     };
   }
 
@@ -35,7 +41,7 @@ export default class Home extends Component<HomeProps, HomeState> {
           <div className="container">
             <WelcomeHeroBanner />
             <Search onWeatherLookup={this.update} />
-            <h2>You have {this.state.weatherLookup}.</h2>
+            <h2>You have {this.state.weatherLookup.city}.</h2>
           </div>
         </main>
 

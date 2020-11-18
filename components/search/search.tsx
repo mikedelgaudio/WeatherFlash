@@ -9,16 +9,23 @@ interface SearchProps {
 
 interface SearchState {
   placeholder: string;
-  weatherLookup: string;
+  weatherLookup: {
+    city: string;
+    location: {};
+  };
+  error: string;
 }
 
 class Search extends Component<SearchProps, SearchState> {
   constructor(props) {
     super(props);
     this.state = {
-      weatherLookup: "",
+      weatherLookup: {
+        city: "",
+        location: {},
+      },
       placeholder: "Allow location or type city",
-      //geolocation: {},
+      error: "",
     };
 
     this.handleSearch = this.handleSearch.bind(this);
@@ -27,14 +34,33 @@ class Search extends Component<SearchProps, SearchState> {
   }
 
   findLocation() {
-    if ("geolocation" in navigator) {
+    if (navigator.geolocation) {
       console.log("Finding your location");
-      navigator.geolocation.getCurrentPosition((position) => {
-        console.log(position);
-      });
+      const timeout = setTimeout("locationFailed()", 10000);
+
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          clearTimeout(timeout);
+
+          var lat = position.coords.latitude;
+          var lng = position.coords.longitude;
+          console.log(`${position.coords}`);
+        },
+        (error) => {
+          clearTimeout(timeout);
+          this.locationFailed(error);
+        }
+      );
+      //geocodeLatLng(lat, lng);
     } else {
       console.log("Could not find your location");
+      this.locationFailed();
+      // Display error modal
     }
+  }
+
+  locationFailed(error?) {
+    console.error(`Location Failed ${error}`);
   }
 
   handleSearch(e) {
@@ -56,11 +82,12 @@ class Search extends Component<SearchProps, SearchState> {
   };
 
   handleUserInput(e) {
-    this.setState({ weatherLookup: e.target.value });
-  }
-
-  componentDidMount() {
-    //window.addEventListener("load", this.test);
+    this.setState((prevState) => ({
+      weatherLookup: {
+        ...prevState.weatherLookup,
+        city: e.target.value,
+      },
+    }));
   }
 
   render() {
@@ -75,7 +102,7 @@ class Search extends Component<SearchProps, SearchState> {
               type="text"
               className="form-control"
               placeholder={this.state.placeholder}
-              value={this.state.weatherLookup}
+              value={this.state.weatherLookup.city}
               onChange={this.handleUserInput}
             />
 
