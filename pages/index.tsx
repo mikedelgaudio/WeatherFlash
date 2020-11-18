@@ -41,7 +41,7 @@ export default class Home extends Component<HomeProps, HomeState> {
           <div className="container">
             <WelcomeHeroBanner />
             <Search onWeatherLookup={this.update} />
-            <h2>You have {this.state.weatherLookup.city}.</h2>
+            {/* <h2>You have {this.state.weatherLookup.city}.</h2> */}
           </div>
         </main>
 

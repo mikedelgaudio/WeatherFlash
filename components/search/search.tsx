@@ -13,7 +13,7 @@ interface SearchState {
     city: string;
     location: {};
   };
-  error: string;
+  errorMsg: string;
 }
 
 class Search extends Component<SearchProps, SearchState> {
@@ -25,7 +25,7 @@ class Search extends Component<SearchProps, SearchState> {
         location: {},
       },
       placeholder: "Allow location or type city",
-      error: "",
+      errorMsg: "",
     };
 
     this.handleSearch = this.handleSearch.bind(this);
@@ -53,14 +53,15 @@ class Search extends Component<SearchProps, SearchState> {
       );
       //geocodeLatLng(lat, lng);
     } else {
-      console.log("Could not find your location");
       this.locationFailed();
-      // Display error modal
     }
   }
 
   locationFailed(error?) {
     console.error(`Location Failed ${error}`);
+    this.setState({
+      errorMsg: "Unable to grab location. Please ensure you have location allowed.",
+    });
   }
 
   handleSearch(e) {
@@ -130,6 +131,12 @@ class Search extends Component<SearchProps, SearchState> {
             </div>
           </div>
         </form>
+        {this.state.errorMsg.length > 0 && (
+          <div className={styles.errorContainer}>
+            <h3>Error</h3>
+            <span>{this.state.errorMsg}</span>
+          </div>
+        )}
       </div>
     );
   }
