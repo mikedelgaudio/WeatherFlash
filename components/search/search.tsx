@@ -11,7 +11,10 @@ interface SearchState {
   placeholder: string;
   weatherLookup: {
     city: string;
-    location: {};
+    location: {
+      lat: number;
+      long: number;
+    };
   };
   errorMsg: string;
 }
@@ -22,7 +25,10 @@ class Search extends Component<SearchProps, SearchState> {
     this.state = {
       weatherLookup: {
         city: "",
-        location: {},
+        location: {
+          lat: 0,
+          long: 0,
+        },
       },
       placeholder: "Allow location or type city",
       errorMsg: "",
@@ -34,6 +40,17 @@ class Search extends Component<SearchProps, SearchState> {
   }
 
   findLocation() {
+    let location$ = {
+      lat: -1,
+      lng: -1,
+    };
+
+    const options = {
+      enableHighAccuracy: true,
+      timeout: 5000,
+      maximumAge: 0,
+    };
+
     if (navigator.geolocation) {
       console.log("Finding your location");
       const timeout = setTimeout("locationFailed()", 10000);
@@ -41,24 +58,49 @@ class Search extends Component<SearchProps, SearchState> {
       navigator.geolocation.getCurrentPosition(
         (position) => {
           clearTimeout(timeout);
-
-          var lat = position.coords.latitude;
-          var lng = position.coords.longitude;
-          console.log(`${position.coords}`);
+          location$.lat = position.coords.latitude;
+          location$.lng = position.coords.longitude;
+          console.log(location$.lng + "HERE");
+          console.log(location$);
         },
         (error) => {
           clearTimeout(timeout);
           this.locationFailed(error);
-        }
+        },
+        options
       );
-      //geocodeLatLng(lat, lng);
     } else {
       this.locationFailed();
     }
+
+    console.log(location$, "AT THENDEs");
+    return location$;
+  }
+
+  async findingLocation() {
+    const pos: any = await new Promise((resolve, reject) => {
+      navigator.geolocation.getCurrentPosition(resolve, reject);
+    });
+
+    return {
+      lat: pos.coords.latitude,
+      long: pos.coords.longitude,
+    };
+  }
+
+  async handleLocationInput() {
+    console.log(`Inside handle location input`);
+    let locationFound = await this.findingLocation();
+    console.log(locationFound + " LOCATION FOUND");
+    this.setState((prevState) => ({
+      weatherLookup: {
+        ...prevState.weatherLookup,
+        location: locationFound,
+      },
+    }));
   }
 
   locationFailed(error?) {
-    console.error(`Location Failed ${error}`);
     this.setState({
       errorMsg: "Unable to grab location. Please ensure you have location allowed.",
     });
@@ -68,13 +110,12 @@ class Search extends Component<SearchProps, SearchState> {
     const elementID = e.currentTarget.id;
     if (elementID === "location") {
       //Grab Location
-      console.log("Requested Click on Location");
-      this.findLocation();
+      this.handleLocationInput();
     } else {
       //Search City
       console.log("Requested Click on City");
-      this.handleWeatherLookup(this.state.weatherLookup);
     }
+    this.handleWeatherLookup(this.state.weatherLookup);
   }
 
   handleWeatherLookup = (location) => {
