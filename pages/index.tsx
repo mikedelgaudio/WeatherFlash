@@ -52,6 +52,8 @@ export default class Home extends Component<HomeProps, HomeState> {
               Location {this.state.weatherLookup.location.long},{" "}
               {this.state.weatherLookup.location.lat}
             </h2>
+            {this.state.weatherLookup.city && <h1>There is a city</h1>}
+            {this.state.weatherLookup.location.lat !== 0 && <h1>Use your current location?</h1>}
           </div>
         </main>
 
