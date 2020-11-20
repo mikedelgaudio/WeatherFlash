@@ -2,6 +2,7 @@ import Head from "next/head";
 import React, { Component } from "react";
 import { Footer } from "../components/footer/footer";
 import Search from "../components/search/search";
+import WeatherCard from "../components/weather-card/weather-card";
 import WelcomeHeroBanner from "../components/welcome-hero-banner/welcome-hero-banner";
 import styles from "../styles/Home.module.scss";
 
@@ -52,8 +53,9 @@ export default class Home extends Component<HomeProps, HomeState> {
               Location {this.state.weatherLookup.location.long},{" "}
               {this.state.weatherLookup.location.lat}
             </h2>
-            {this.state.weatherLookup.city && <h1>There is a city</h1>}
-            {this.state.weatherLookup.location.lat !== 0 && <h1>Use your current location?</h1>}
+
+            {(this.state.weatherLookup.location.lat !== 0 ||
+              this.state.weatherLookup.city !== "") && <WeatherCard />}
           </div>
         </main>
 
