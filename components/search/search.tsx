@@ -11,7 +11,10 @@ interface SearchState {
   placeholder: string;
   weatherLookup: {
     city: string;
-    location: {};
+    location: {
+      lat: number;
+      long: number;
+    };
   };
   errorMsg: string;
 }
@@ -22,7 +25,10 @@ class Search extends Component<SearchProps, SearchState> {
     this.state = {
       weatherLookup: {
         city: "",
-        location: {},
+        location: {
+          lat: 0,
+          long: 0,
+        },
       },
       placeholder: "Allow location or type city",
       errorMsg: "",
@@ -30,59 +36,23 @@ class Search extends Component<SearchProps, SearchState> {
 
     this.handleSearch = this.handleSearch.bind(this);
     this.handleUserInput = this.handleUserInput.bind(this);
-    this.findLocation = this.findLocation.bind(this);
-  }
-
-  findLocation() {
-    if (navigator.geolocation) {
-      console.log("Finding your location");
-      const timeout = setTimeout("locationFailed()", 10000);
-
-      navigator.geolocation.getCurrentPosition(
-        (position) => {
-          clearTimeout(timeout);
-
-          var lat = position.coords.latitude;
-          var lng = position.coords.longitude;
-          console.log(`${position.coords}`);
-        },
-        (error) => {
-          clearTimeout(timeout);
-          this.locationFailed(error);
-        }
-      );
-      //geocodeLatLng(lat, lng);
-    } else {
-      this.locationFailed();
-    }
-  }
-
-  locationFailed(error?) {
-    console.error(`Location Failed ${error}`);
-    this.setState({
-      errorMsg: "Unable to grab location. Please ensure you have location allowed.",
-    });
+    this.handleLocation = this.handleLocation.bind(this);
+    this.getCoor = this.getCoor.bind(this);
+    this.errorCoor = this.errorCoor.bind(this);
+    this.handleWeatherLookup = this.handleWeatherLookup.bind(this);
+    this.locationFailed = this.locationFailed.bind(this);
   }
 
   handleSearch(e) {
     const elementID = e.currentTarget.id;
     if (elementID === "location") {
-      //Grab Location
-      console.log("Requested Click on Location");
-      this.findLocation();
-    } else {
-      //Search City
-      console.log("Requested Click on City");
-      this.handleWeatherLookup(this.state.weatherLookup);
+      this.handleLocation();
     }
+    this.handleWeatherLookup(this.state.weatherLookup);
   }
 
-  handleWeatherLookup = (location) => {
-    console.log(location);
-    this.props.onWeatherLookup(location);
-  };
-
   handleUserInput(e) {
+    e.preventDefault();
     this.setState((prevState) => ({
       weatherLookup: {
         ...prevState.weatherLookup,
@@ -91,10 +61,60 @@ class Search extends Component<SearchProps, SearchState> {
     }));
   }
 
+  handleLocation() {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(this.getCoor, this.errorCoor, {
+        maximumAge: 60000,
+        timeout: 10000,
+        enableHighAccuracy: true,
+      });
+    } else {
+      // Add tooltip location is disabled?
+      this.locationFailed();
+    }
+  }
+
+  getCoor(pos) {
+    this.setState((prevState) => ({
+      weatherLookup: {
+        ...prevState.weatherLookup,
+        location: {
+          ...prevState.weatherLookup.location,
+          lat: pos.coords.latitude,
+          long: pos.coords.longitude,
+        },
+      },
+    }));
+
+    console.log(this.state.weatherLookup.location);
+    this.handleWeatherLookup(this.state.weatherLookup);
+  }
+
+  errorCoor(err) {
+    console.warn("IN THE ERROR " + err.message);
+    if (err.message === "User denied Geolocation") {
+      this.locationFailed("You have denied location access");
+    }
+  }
+
+  locationFailed(error?) {
+    this.setState({
+      errorMsg: `Unable to grab location. ${error}.`,
+    });
+  }
+
+  handleWeatherLookup = (location) => {
+    this.props.onWeatherLookup(location);
+  };
+
+  componentDidMount() {
+    this.handleLocation();
+  }
+
   render() {
     return (
       <div className={styles.searchForm}>
-        <form>
+        <form onSubmit={this.handleUserInput}>
           <div className="input-group">
             <label htmlFor="weatherLookup">{this.state.placeholder}</label>
             <input
@@ -143,3 +163,7 @@ class Search extends Component<SearchProps, SearchState> {
 }
 
 export default Search;
+
+// Handle when user hits enter on textbox
+// Add tooltips over location or search icon to make UX more apparent for user instructions
+// Handle more error scenarios for location

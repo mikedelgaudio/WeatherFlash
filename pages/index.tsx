@@ -10,7 +10,10 @@ interface HomeProps {}
 interface HomeState {
   weatherLookup: {
     city: string;
-    location: {};
+    location: {
+      lat: number;
+      long: number;
+    };
   };
 }
 
@@ -20,7 +23,10 @@ export default class Home extends Component<HomeProps, HomeState> {
     this.state = {
       weatherLookup: {
         city: "",
-        location: {},
+        location: {
+          lat: 0,
+          long: 0,
+        },
       },
     };
   }
@@ -41,7 +47,13 @@ export default class Home extends Component<HomeProps, HomeState> {
           <div className="container">
             <WelcomeHeroBanner />
             <Search onWeatherLookup={this.update} />
-            {/* <h2>You have {this.state.weatherLookup.city}.</h2> */}
+            <h2>City {this.state.weatherLookup.city}.</h2>
+            <h2>
+              Location {this.state.weatherLookup.location.long},{" "}
+              {this.state.weatherLookup.location.lat}
+            </h2>
+            {this.state.weatherLookup.city && <h1>There is a city</h1>}
+            {this.state.weatherLookup.location.lat !== 0 && <h1>Use your current location?</h1>}
           </div>
         </main>
 
