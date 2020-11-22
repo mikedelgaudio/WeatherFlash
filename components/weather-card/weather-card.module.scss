@@ -1,0 +1,19 @@
+.weatherCardWrapper {
+  border-radius: 20px;
+  border: 2px solid black;
+  height: 45vh;
+  padding: 2rem;
+  overflow: scroll;
+  width: 500px;
+  justify-content: space-between;
+
+  h2 {
+    font-size: 4rem;
+  }
+
+  .todayWrapper {
+    align-items: center;
+    position: relative;
+    display: inherit;
+  }
+}
