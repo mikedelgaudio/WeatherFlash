@@ -1,8 +1,9 @@
 # WeatherFlash
 ### The one stop site to get your weather in a flash 
 
-![](docs/demo.gif)
-
+<p align="center">
+  <img width="650" height="650" src="docs/demo.gif">
+</p>
 
 ## Development
 First, run the development server:
