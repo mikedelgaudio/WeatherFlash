@@ -1,6 +1,8 @@
 # WeatherFlash
 ### The one stop site to get your weather in a flash 
 
+![](docs/demo.gif)
+
 
 ## Development
 First, run the development server:

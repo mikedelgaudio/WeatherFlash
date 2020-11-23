@@ -17,29 +17,28 @@ export default class WeatherCard extends Component<WeatherCardProps, WeatherCard
           <h1 className={styles.currentlyIn}>Currently in Hoboken, NJ</h1>
           <div className="row justify-content-center">
             <div className={styles.todayWrapper}>
-              <img src="/assets/icons8-sun.gif" width="120px" height="120px" />
+              <img src="/assets/snow.gif" width="120px" height="120px" />
               <div className="col">
                 <div className="row m-0">
-                  <h2>60&deg;F</h2>
+                  <h2>23&deg;F</h2>
                   <div className="col">
-                    <h3>72&deg;F</h3>
-                    <h3>53&deg;F</h3>
+                    <h3>34&deg;</h3>
+                    <h3>21&deg;</h3>
                   </div>
                 </div>
-                <h3>Feels like 62&deg;F</h3>
+                <h3>Feels like 18&deg;</h3>
               </div>
             </div>
           </div>
           <div className="text-center">
-            <h4>Cloudy, overcast clouds.</h4>
+            <h4>Snowing, light snow showers.</h4>
           </div>
           <div className={styles.metricWrapper}>
-            <ul className="list-group list-group-flush">
-              <li className="list-group-item">Cras justo odio</li>
-              <li className="list-group-item">Dapibus ac facilisis in</li>
-              <li className="list-group-item">Morbi leo risus</li>
-              <li className="list-group-item">Porta ac consectetur ac</li>
-              <li className="list-group-item">Vestibulum at eros</li>
+            <ul className="list-group list-group-flush text-center">
+              <li className="list-group-item">Sunrise 6:20AM - Sunset 5:53PM </li>
+              <li className="list-group-item">Humidity 10%</li>
+              <li className="list-group-item">Visibility 8mi</li>
+              <li className="list-group-item">Wind 1.5mph North</li>
             </ul>
           </div>
         </div>
