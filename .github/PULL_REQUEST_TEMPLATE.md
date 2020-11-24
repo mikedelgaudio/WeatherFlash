@@ -1,3 +1,11 @@
+---
+name: Frontend Template Report
+about: Template 
+title: "[FE] <PAGE?> - <DESCRIPTION?>"
+labels: ''
+assignees: ''
+
+---
 
 
 # Description
