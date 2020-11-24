@@ -1,11 +1,4 @@
----
-name: Frontend Pull Request
-about: ""
-title: "Test PR"
-labels: ""
-assignes: ""
 
----
 
 # Description
 
