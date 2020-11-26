@@ -1,7 +1,15 @@
 import React, { Component } from "react";
 import styles from "./weather-card.module.scss";
 
-interface WeatherCardProps {}
+interface WeatherCardProps {
+  weatherLookup: {
+    city: string;
+    location: {
+      lat: number;
+      long: number;
+    };
+  };
+}
 
 interface WeatherCardState {}
 
