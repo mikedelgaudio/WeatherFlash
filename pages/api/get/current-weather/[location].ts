@@ -5,9 +5,12 @@ export default async (req, res) => {
   let city: string = "Hoboken";
   let lat: number = 0;
   let long: number = 0;
-  let location: string = "";
 
-  if (location === "coordinates") {
+  const usingCity: boolean = determineMode(req.query);
+
+  console.log(req.query);
+
+  if (!usingCity) {
     search = `lat=${lat}&lon=${long}`;
   } else {
     search = `q=${city}`;
@@ -20,3 +23,7 @@ export default async (req, res) => {
   res.statusCode = 200;
   res.json(json);
 };
+
+function determineMode(query): boolean {
+  return false;
+}

@@ -10,6 +10,14 @@ export default class WeatherCard extends Component<WeatherCardProps, WeatherCard
     super(props);
     this.state = {};
   }
+
+  componentDidMount() {
+    const apiUrl = "https://api.github.com/users/hacktivist123/repos";
+    fetch(apiUrl)
+      .then((response) => response.json())
+      .then((data) => console.log("This is your data", data));
+  }
+
   render() {
     return (
       <div className="d-flex justify-content-center">
