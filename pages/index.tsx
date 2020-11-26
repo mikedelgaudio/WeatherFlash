@@ -53,7 +53,9 @@ export default class Home extends Component<HomeProps, HomeState> {
             </h2> */}
 
             {(this.state.weatherLookup.location.lat === 0 ||
-              this.state.weatherLookup.city === "") && <WeatherCard />}
+              this.state.weatherLookup.city === "") && (
+              <WeatherCard weatherLookup={this.state.weatherLookup} />
+            )}
           </div>
         </main>
 

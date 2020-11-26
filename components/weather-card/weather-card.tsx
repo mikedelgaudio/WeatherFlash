@@ -8,7 +8,9 @@ interface WeatherCardState {}
 export default class WeatherCard extends Component<WeatherCardProps, WeatherCardState> {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      weatherLookup: this.props.weatherLookup,
+    };
   }
 
   componentDidMount() {
@@ -17,6 +19,8 @@ export default class WeatherCard extends Component<WeatherCardProps, WeatherCard
     fetch(apiUrl)
       .then((response) => response.json())
       .then((data) => console.log("This is your data", data));
+
+    console.log(this.props);
   }
 
   render() {
