@@ -12,7 +12,8 @@ export default class WeatherCard extends Component<WeatherCardProps, WeatherCard
   }
 
   componentDidMount() {
-    const apiUrl = "https://api.github.com/users/hacktivist123/repos";
+    const apiUrl = `${process.env.API_ENDPOINT}/get/current-weather/Testing`;
+    console.log(apiUrl);
     fetch(apiUrl)
       .then((response) => response.json())
       .then((data) => console.log("This is your data", data));
