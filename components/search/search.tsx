@@ -7,7 +7,7 @@ interface SearchProps {}
 
 interface SearchState {}
 
-class Search extends Component<any, any> {
+class Search extends Component<any> {
   constructor(props) {
     super(props);
   }

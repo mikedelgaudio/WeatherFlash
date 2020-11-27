@@ -18,7 +18,26 @@ interface HomeState {
   };
   placeholder: string;
   errorMsg: string;
-  weatherData: {};
+  weatherData: {
+    temp: {
+      current: number;
+      high: number;
+      low: number;
+      feelsLike: number;
+    };
+    condition: {
+      main: "N/A";
+      description: "N/A";
+    };
+    sunrise: number;
+    sunset: number;
+    wind: {
+      speed: number;
+      deg: number;
+    };
+    humidity: number;
+    visibility: number;
+  };
   tempMode: string;
   userSearched: boolean;
 }
@@ -127,7 +146,7 @@ export default class Home extends Component<HomeProps, HomeState> {
 
   getData = async () => {
     const apiUrl = `${process.env.API_ENDPOINT}/get/current-weather/${this.state.weatherLookup}`;
-    console.log(apiUrl);
+
     await fetch(apiUrl)
       .then((response) => response.json())
       .then((data) => {
@@ -138,7 +157,24 @@ export default class Home extends Component<HomeProps, HomeState> {
             temp: {
               ...prevState.weatherData.temp,
               current: data.main.temp,
+              high: data.main.temp_max,
+              low: data.main.temp_min,
+              feelsLike: data.main.feels_like,
             },
+            condition: {
+              ...prevState.weatherData.condition,
+              main: data.weather[0].main,
+              description: data.weather[0].description,
+            },
+            sunrise: data.sys.sunrise,
+            sunset: data.sys.sunset,
+            wind: {
+              ...prevState.weatherData.wind,
+              speed: data.wind.speed,
+              deg: data.wind.deg,
+            },
+            humidity: data.main.humidity,
+            visibility: data.visibility,
           },
         }));
       });
