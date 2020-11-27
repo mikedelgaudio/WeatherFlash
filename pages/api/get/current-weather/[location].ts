@@ -2,21 +2,21 @@
 
 export default async (req, res) => {
   let search: string = "";
-  let city: string = "Hoboken";
+  let city: string = "New York";
   let lat: number = 0;
   let long: number = 0;
 
-  const usingCity: boolean = determineMode(req.query);
+  const usingCity: boolean = true; //determineMode(req.query);
 
   console.log(req.query);
 
-  if (!usingCity) {
-    search = `lat=${lat}&lon=${long}`;
-  } else {
+  if (usingCity) {
     search = `q=${city}`;
+  } else {
+    //search = `lat=${lat}&lon=${long}`;
   }
 
-  const url = `https://api.openweathermap.org/data/2.5/weather?${search}&appid=${process.env.API_KEY}`;
+  const url = `https://api.openweathermap.org/data/2.5/weather?${search}&appid=${process.env.API_KEY}&units=imperial`;
 
   const fetched = await fetch(url);
   const json = await fetched.json();

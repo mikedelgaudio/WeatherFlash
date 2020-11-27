@@ -11,6 +11,14 @@ export default class WeatherCard extends Component<any> {
 
   componentDidMount() {}
 
+  toCelsius = (fahrenheit) => {
+    return ((fahrenheit - 32) * 5) / 9;
+  };
+
+  toFahrenheit = (celsius) => {
+    return (celsius * 9) / 5 + 32;
+  };
+
   render() {
     console.log(this.props);
     return (
@@ -33,14 +41,17 @@ export default class WeatherCard extends Component<any> {
             </div>
           </div>
           <div className="text-center">
-            <h4>Snowing, light snow showers.</h4>
+            <h4>
+              {this.props.weatherData.condition.main},{" "}
+              {this.props.weatherData.condition.description}.
+            </h4>
           </div>
           <div className={styles.metricWrapper}>
             <ul className="list-group list-group-flush text-center">
               <li className="list-group-item">Sunrise 6:20AM - Sunset 5:53PM </li>
               <li className="list-group-item">Humidity 10%</li>
               <li className="list-group-item">Visibility 8mi</li>
-              <li className="list-group-item">Wind 1.5mph North</li>
+              <li className="list-group-item">Wind {this.props.weatherData.wind.speed}mph North</li>
             </ul>
           </div>
         </div>

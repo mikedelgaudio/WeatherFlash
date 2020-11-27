@@ -37,6 +37,9 @@ interface HomeState {
     };
     humidity: number;
     visibility: number;
+    timezone: number;
+    cityName: string;
+    coords: { lat: number; long: number };
   };
   tempMode: string;
   userSearched: boolean;
@@ -68,12 +71,12 @@ export default class Home extends Component<HomeProps, HomeState> {
         },
         sunrise: 0,
         sunset: 0,
-        wind: {
-          speed: 0,
-          deg: 0,
-        },
+        wind: { speed: 0, deg: 0 },
         humidity: 0,
         visibility: 0,
+        timezone: 0,
+        cityName: "N/A",
+        coords: { lat: 0, long: 0 },
       },
       tempMode: "F",
       userSearched: false,
@@ -145,39 +148,51 @@ export default class Home extends Component<HomeProps, HomeState> {
   };
 
   getData = async () => {
-    const apiUrl = `${process.env.API_ENDPOINT}/get/current-weather/${this.state.weatherLookup}`;
+    try {
+      const apiUrl = `${process.env.API_ENDPOINT}/get/current-weather/${this.state.weatherLookup}`;
 
-    await fetch(apiUrl)
-      .then((response) => response.json())
-      .then((data) => {
-        console.log(data);
-        this.setState((prevState) => ({
-          weatherData: {
-            ...prevState.weatherData,
-            temp: {
-              ...prevState.weatherData.temp,
-              current: data.main.temp,
-              high: data.main.temp_max,
-              low: data.main.temp_min,
-              feelsLike: data.main.feels_like,
+      await fetch(apiUrl)
+        .then((response) => response.json())
+        .then((data) => {
+          console.log(data);
+          this.setState((prevState) => ({
+            weatherData: {
+              ...prevState.weatherData,
+              temp: {
+                ...prevState.weatherData.temp,
+                current: data.main.temp,
+                high: data.main.temp_max,
+                low: data.main.temp_min,
+                feelsLike: data.main.feels_like,
+              },
+              condition: {
+                ...prevState.weatherData.condition,
+                main: data.weather[0].main,
+                description: data.weather[0].description,
+              },
+              sunrise: data.sys.sunrise,
+              sunset: data.sys.sunset,
+              wind: {
+                ...prevState.weatherData.wind,
+                speed: data.wind.speed,
+                deg: data.wind.deg,
+              },
+              humidity: data.main.humidity,
+              visibility: data.visibility,
+              timezone: data.timezone,
+              cityName: data.cityName,
+              coords: {
+                ...prevState.weatherData.coords,
+                lat: data.coord.lat,
+                long: data.coord.lon,
+              },
             },
-            condition: {
-              ...prevState.weatherData.condition,
-              main: data.weather[0].main,
-              description: data.weather[0].description,
-            },
-            sunrise: data.sys.sunrise,
-            sunset: data.sys.sunset,
-            wind: {
-              ...prevState.weatherData.wind,
-              speed: data.wind.speed,
-              deg: data.wind.deg,
-            },
-            humidity: data.main.humidity,
-            visibility: data.visibility,
-          },
-        }));
-      });
+          }));
+        });
+    } catch (e) {
+      console.error(e);
+      // Display error
+    }
   };
 
   public render() {
@@ -208,8 +223,6 @@ export default class Home extends Component<HomeProps, HomeState> {
                   weatherLookup={this.state.weatherLookup}
                 />
               )}
-
-            <h1>{this.state.weatherData.temp.current}</h1>
           </div>
         </main>
 
