@@ -19,6 +19,8 @@ interface HomeState {
   placeholder: string;
   errorMsg: string;
   weatherData: {};
+  tempMode: string;
+  userSearched: boolean;
 }
 
 export default class Home extends Component<HomeProps, HomeState> {
@@ -41,25 +43,36 @@ export default class Home extends Component<HomeProps, HomeState> {
           low: 0,
           feelsLike: 0,
         },
+        condition: {
+          main: "N/A",
+          description: "N/A",
+        },
+        sunrise: 0,
+        sunset: 0,
+        wind: {
+          speed: 0,
+          deg: 0,
+        },
+        humidity: 0,
+        visibility: 0,
       },
+      tempMode: "F",
+      userSearched: false,
     };
   }
 
   handleSearch = (e) => {
+    console.log("Hit the search");
+    e.preventDefault();
     const elementID = e.currentTarget.id;
+    this.setState({
+      userSearched: true,
+    });
     if (elementID === "location") {
       this.handleLocation();
     }
-  };
 
-  handleUserInput = (e) => {
-    e.preventDefault();
-    this.setState((prevState) => ({
-      weatherLookup: {
-        ...prevState.weatherLookup,
-        city: e.target.value,
-      },
-    }));
+    this.getData();
   };
 
   handleLocation = () => {
@@ -73,6 +86,15 @@ export default class Home extends Component<HomeProps, HomeState> {
       // Add tooltip location is disabled?
       this.locationFailed();
     }
+  };
+
+  handleUserInput = (e) => {
+    this.setState((prevState) => ({
+      weatherLookup: {
+        ...prevState.weatherLookup,
+        city: e.target.value,
+      },
+    }));
   };
 
   getCoor = (pos) => {
@@ -103,6 +125,25 @@ export default class Home extends Component<HomeProps, HomeState> {
     });
   };
 
+  getData = async () => {
+    const apiUrl = `${process.env.API_ENDPOINT}/get/current-weather/${this.state.weatherLookup}`;
+    console.log(apiUrl);
+    await fetch(apiUrl)
+      .then((response) => response.json())
+      .then((data) => {
+        console.log(data);
+        this.setState((prevState) => ({
+          weatherData: {
+            ...prevState.weatherData,
+            temp: {
+              ...prevState.weatherData.temp,
+              current: data.main.temp,
+            },
+          },
+        }));
+      });
+  };
+
   public render() {
     return (
       <div className={styles.container}>
@@ -113,7 +154,7 @@ export default class Home extends Component<HomeProps, HomeState> {
 
         <main className={styles.main}>
           <div className="container">
-            <WelcomeHeroBanner />
+            {!this.state.userSearched && <WelcomeHeroBanner />}
 
             <Search
               handleLocation={this.handleLocation}
@@ -122,10 +163,17 @@ export default class Home extends Component<HomeProps, HomeState> {
               errorMsg={this.state.errorMsg}
               placeholder={this.state.placeholder}
             />
-            {(this.state.weatherLookup.location.lat === 0 ||
-              this.state.weatherLookup.city === "") && (
-              <WeatherCard weatherLookup={this.state.weatherLookup} />
-            )}
+
+            {(this.state.weatherLookup.location.lat !== 0 ||
+              this.state.weatherLookup.city !== "") &&
+              this.state.userSearched && (
+                <WeatherCard
+                  weatherData={this.state.weatherData}
+                  weatherLookup={this.state.weatherLookup}
+                />
+              )}
+
+            <h1>{this.state.weatherData.temp.current}</h1>
           </div>
         </main>
 

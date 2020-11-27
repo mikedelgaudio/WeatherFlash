@@ -19,12 +19,12 @@ class Search extends Component<any, any> {
   render() {
     return (
       <div className={styles.searchForm}>
-        <form onSubmit={this.props.handleUserInput}>
+        <form onSubmit={this.props.handleSearch}>
           <div className="input-group">
             <label htmlFor="weatherLookup">{this.props.placeholder}</label>
             <input
               name="weatherLookup"
-              id="weatherLookup"
+              id="weatherLookupField"
               type="text"
               className="form-control"
               placeholder={this.props.placeholder}

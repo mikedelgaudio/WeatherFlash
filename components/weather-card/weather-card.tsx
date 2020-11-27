@@ -1,41 +1,22 @@
 import React, { Component } from "react";
 import styles from "./weather-card.module.scss";
 
-interface WeatherCardProps {
-  weatherLookup: {
-    city: string;
-    location: {
-      lat: number;
-      long: number;
-    };
-  };
-}
-
-interface WeatherCardState {}
-
-export default class WeatherCard extends Component<WeatherCardProps, WeatherCardState> {
+export default class WeatherCard extends Component<any> {
   constructor(props) {
     super(props);
     this.state = {
-      weatherLookup: this.props.weatherLookup,
+      weatherData: this.props.weatherData,
     };
   }
 
-  componentDidMount() {
-    const apiUrl = `${process.env.API_ENDPOINT}/get/current-weather/Testing`;
-    console.log(apiUrl);
-    fetch(apiUrl)
-      .then((response) => response.json())
-      .then((data) => console.log("This is your data", data));
-
-    console.log(this.props);
-  }
+  componentDidMount() {}
 
   render() {
+    console.log(this.props);
     return (
       <div className="d-flex justify-content-center">
         <div className={styles.weatherCardWrapper}>
-          <h1 className={styles.currentlyIn}>Currently in Hoboken, NJ</h1>
+          <h1 className={styles.currentlyIn}>Currently in {this.props.weatherLookup.city} </h1>
           <div className="row justify-content-center">
             <div className={styles.todayWrapper}>
               <img src="/assets/snow.gif" width="120px" height="120px" />
@@ -67,3 +48,5 @@ export default class WeatherCard extends Component<WeatherCardProps, WeatherCard
     );
   }
 }
+
+// Need to ensure this only updates when the user clicks
