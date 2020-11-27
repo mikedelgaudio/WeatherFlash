@@ -126,8 +126,6 @@ export default class Home extends Component<HomeProps, HomeState> {
               this.state.weatherLookup.city === "") && (
               <WeatherCard weatherLookup={this.state.weatherLookup} />
             )}
-
-            <h1>{this.state.weatherLookup.city}</h1>
           </div>
         </main>
 
