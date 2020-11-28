@@ -56,7 +56,7 @@ export default class Home extends Component<HomeProps, HomeState> {
           long: 0,
         },
       },
-      placeholder: "Allow location or type city",
+      placeholder: "Type city or use location",
       errorMsg: "",
       weatherData: {
         temp: {
@@ -95,6 +95,8 @@ export default class Home extends Component<HomeProps, HomeState> {
     }
 
     this.getData();
+
+    e.target.reset();
   };
 
   handleLocation = () => {
@@ -135,7 +137,6 @@ export default class Home extends Component<HomeProps, HomeState> {
   };
 
   errorCoor = (err) => {
-    console.warn("IN THE ERROR " + err.message);
     if (err.message === "User denied Geolocation") {
       this.locationFailed("You have denied location access");
     }

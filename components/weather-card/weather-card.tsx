@@ -24,9 +24,33 @@ export default class WeatherCard extends Component<any> {
     return (distance / 1000).toFixed();
   };
 
+  toDirection = (degrees) => {
+    const val = Math.floor(degrees / 22.5 + 0.5);
+    console.log(degrees);
+    const arr = [
+      "N",
+      "NNE",
+      "NE",
+      "ENE",
+      "E",
+      "ESE",
+      "SE",
+      "SSE",
+      "S",
+      "SSW",
+      "SW",
+      "WSW",
+      "W",
+      "WNW",
+      "NW",
+      "NNW",
+    ];
+    return arr[val % 16];
+  };
+
   render() {
     return (
-      <div className="d-flex justify-content-center">
+      <div className="d-flex justify-content-center pt-5">
         <div className={styles.weatherCardWrapper}>
           <h1 className={styles.currentlyIn}>Currently in {this.props.weatherData.cityName} </h1>
           <div className="row justify-content-center">
@@ -39,22 +63,22 @@ export default class WeatherCard extends Component<any> {
                     {this.props.tempMode}
                   </h2>
                   <div className="col">
-                    <h3>
+                    <h3 className="font-weight-light">
                       {this.props.weatherData.temp.high.toFixed()}&deg;{this.props.tempMode}
                     </h3>
-                    <h3>
+                    <h3 className="font-weight-light">
                       {this.props.weatherData.temp.low.toFixed()}&deg;{this.props.tempMode}
                     </h3>
                   </div>
                 </div>
-                <h3>
+                <h3 className="font-weight-light">
                   Feels like {this.props.weatherData.temp.feelsLike.toFixed()}&deg;
                   {this.props.tempMode}
                 </h3>
               </div>
             </div>
           </div>
-          <div className="text-center">
+          <div className="text-center pt-1">
             <h4>
               {this.props.weatherData.condition.main},{" "}
               {this.props.weatherData.condition.description}.
@@ -70,7 +94,10 @@ export default class WeatherCard extends Component<any> {
               <li className="list-group-item">
                 Visibility {this.toMiles(this.props.weatherData.visibility)}mi
               </li>
-              <li className="list-group-item">Wind {this.props.weatherData.wind.speed}mph North</li>
+              <li className="list-group-item">
+                Wind {this.props.weatherData.wind.speed}mph{" "}
+                {this.toDirection(this.props.weatherData.wind.deg)}
+              </li>
             </ul>
           </div>
         </div>
