@@ -6,6 +6,7 @@ export default class WeatherCard extends Component<any> {
     super(props);
     this.state = {
       weatherData: this.props.weatherData,
+      tempMode: this.props.tempMode,
     };
   }
 
@@ -19,24 +20,43 @@ export default class WeatherCard extends Component<any> {
     return (celsius * 9) / 5 + 32;
   };
 
+  toMiles = (distance) => {
+    return (distance / 1000).toFixed();
+  };
+
+  convertToTime = (time) => {
+    const final = new Date(time);
+    return `${final.toISOString()}:${final.getMinutes()}`;
+  };
+
   render() {
     console.log(this.props);
     return (
       <div className="d-flex justify-content-center">
         <div className={styles.weatherCardWrapper}>
-          <h1 className={styles.currentlyIn}>Currently in {this.props.weatherLookup.city} </h1>
+          <h1 className={styles.currentlyIn}>Currently in {this.props.weatherData.cityName} </h1>
           <div className="row justify-content-center">
             <div className={styles.todayWrapper}>
               <img src="/assets/snow.gif" width="120px" height="120px" />
               <div className="col">
                 <div className="row m-0">
-                  <h2>23&deg;F</h2>
+                  <h2>
+                    {this.props.weatherData.temp.current.toFixed()}&deg;
+                    {this.props.tempMode}
+                  </h2>
                   <div className="col">
-                    <h3>34&deg;</h3>
-                    <h3>21&deg;</h3>
+                    <h3>
+                      {this.props.weatherData.temp.high.toFixed()}&deg;{this.props.tempMode}
+                    </h3>
+                    <h3>
+                      {this.props.weatherData.temp.low.toFixed()}&deg;{this.props.tempMode}
+                    </h3>
                   </div>
                 </div>
-                <h3>Feels like 18&deg;</h3>
+                <h3>
+                  Feels like {this.props.weatherData.temp.feelsLike.toFixed()}&deg;
+                  {this.props.tempMode}
+                </h3>
               </div>
             </div>
           </div>
@@ -48,9 +68,13 @@ export default class WeatherCard extends Component<any> {
           </div>
           <div className={styles.metricWrapper}>
             <ul className="list-group list-group-flush text-center">
-              <li className="list-group-item">Sunrise 6:20AM - Sunset 5:53PM </li>
-              <li className="list-group-item">Humidity 10%</li>
-              <li className="list-group-item">Visibility 8mi</li>
+              <li className="list-group-item">
+                Sunrise {this.convertToTime(this.props.weatherData.sunrise)} - Sunset 5:53PM{" "}
+              </li>
+              <li className="list-group-item">Humidity {this.props.weatherData.humidity}%</li>
+              <li className="list-group-item">
+                Visibility {this.toMiles(this.props.weatherData.visibility)}mi
+              </li>
               <li className="list-group-item">Wind {this.props.weatherData.wind.speed}mph North</li>
             </ul>
           </div>

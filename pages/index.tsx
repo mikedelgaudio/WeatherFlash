@@ -180,7 +180,7 @@ export default class Home extends Component<HomeProps, HomeState> {
               humidity: data.main.humidity,
               visibility: data.visibility,
               timezone: data.timezone,
-              cityName: data.cityName,
+              cityName: data.name,
               coords: {
                 ...prevState.weatherData.coords,
                 lat: data.coord.lat,
@@ -221,6 +221,7 @@ export default class Home extends Component<HomeProps, HomeState> {
                 <WeatherCard
                   weatherData={this.state.weatherData}
                   weatherLookup={this.state.weatherLookup}
+                  tempMode={this.state.tempMode}
                 />
               )}
           </div>
