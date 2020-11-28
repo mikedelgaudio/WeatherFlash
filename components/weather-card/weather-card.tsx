@@ -1,6 +1,6 @@
 import React, { Component } from "react";
+import Moment from "react-moment";
 import styles from "./weather-card.module.scss";
-
 export default class WeatherCard extends Component<any> {
   constructor(props) {
     super(props);
@@ -24,13 +24,7 @@ export default class WeatherCard extends Component<any> {
     return (distance / 1000).toFixed();
   };
 
-  convertToTime = (time) => {
-    const final = new Date(time);
-    return `${final.toISOString()}:${final.getMinutes()}`;
-  };
-
   render() {
-    console.log(this.props);
     return (
       <div className="d-flex justify-content-center">
         <div className={styles.weatherCardWrapper}>
@@ -69,7 +63,8 @@ export default class WeatherCard extends Component<any> {
           <div className={styles.metricWrapper}>
             <ul className="list-group list-group-flush text-center">
               <li className="list-group-item">
-                Sunrise {this.convertToTime(this.props.weatherData.sunrise)} - Sunset 5:53PM{" "}
+                Sunrise <Moment date={this.props.weatherData.sunrise} format="h:mm A" unix local />{" "}
+                - Sunset <Moment date={this.props.weatherData.sunset} format="h:mm A" unix local />
               </li>
               <li className="list-group-item">Humidity {this.props.weatherData.humidity}%</li>
               <li className="list-group-item">
