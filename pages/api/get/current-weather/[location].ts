@@ -6,14 +6,12 @@ export default async (req, res) => {
   let lat: number = 0;
   let long: number = 0;
 
-  const usingCity: boolean = true; //determineMode(req.query);
-
-  console.log(req.query);
+  const usingCity: boolean = determineMode(req);
 
   if (usingCity) {
     search = `q=${city}`;
   } else {
-    //search = `lat=${lat}&lon=${long}`;
+    search = `lat=${lat}&lon=${long}`;
   }
 
   const url = `https://api.openweathermap.org/data/2.5/weather?${search}&appid=${process.env.API_KEY}&units=imperial`;
@@ -25,5 +23,9 @@ export default async (req, res) => {
 };
 
 function determineMode(query): boolean {
-  return false;
+  console.log(query.params);
+  console.log(query);
+  //console.log(JSON.stringify(query.location.weatherLookup));
+
+  return true;
 }

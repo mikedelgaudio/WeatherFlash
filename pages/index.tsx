@@ -92,11 +92,12 @@ export default class Home extends Component<HomeProps, HomeState> {
     });
     if (elementID === "location") {
       this.handleLocation();
+      this.getData("coord");
+    } else {
+      this.getData("city");
     }
 
-    this.getData();
-
-    e.target.reset();
+    ///e.target.reset();
   };
 
   handleLocation = () => {
@@ -148,10 +149,16 @@ export default class Home extends Component<HomeProps, HomeState> {
     });
   };
 
-  getData = async () => {
+  getData = async (mode) => {
     try {
-      const apiUrl = `${process.env.API_ENDPOINT}/get/current-weather/${this.state.weatherLookup}`;
-
+      let apiUrl = `${process.env.API_ENDPOINT}/get/current-weather/?`;
+      if (mode === "city") {
+        apiUrl += `q=${this.state.weatherLookup.city}`;
+      } else {
+        apiUrl += `lat=${this.state.weatherLookup.location.lat}&lon=${this.state.weatherLookup.location.long}`;
+      }
+      // const apiUrl = `${process.env.API_ENDPOINT}/get/current-weather/${this.state.weatherLookup}`;
+      console.log(apiUrl);
       await fetch(apiUrl)
         .then((response) => response.json())
         .then((data) => {
