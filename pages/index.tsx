@@ -151,9 +151,9 @@ export default class Home extends Component<HomeProps, HomeState> {
 
   getData = async (mode) => {
     try {
-      let apiUrl = `${process.env.API_ENDPOINT}/get/current-weather/`;
+      let apiUrl = `${process.env.API_ENDPOINT}/get/current-weather/location?`;
       if (mode === "city") {
-        apiUrl += `q=${this.state.weatherLookup.city}`;
+        apiUrl += `city=${this.state.weatherLookup.city}`;
       } else {
         apiUrl += `lat=${this.state.weatherLookup.location.lat}&lon=${this.state.weatherLookup.location.long}`;
       }

@@ -6,16 +6,14 @@ export default async (req, res) => {
   }
 
   let search: string = "";
-  let city: string = "New York";
-  let lat: number = 0;
-  let long: number = 0;
 
-  const usingCity: boolean = determineMode(req);
-
-  if (usingCity) {
+  if (usingCity(req)) {
+    const city = req.query.city;
     search = `q=${city}`;
   } else {
-    search = `lat=${lat}&lon=${long}`;
+    const lat = req.query.lat;
+    const lon = req.query.lon;
+    search = `lat=${lat}&lon=${lon}`;
   }
 
   const url = `https://api.openweathermap.org/data/2.5/weather?${search}&appid=${process.env.API_KEY}&units=imperial`;
@@ -26,13 +24,19 @@ export default async (req, res) => {
   res.json(json);
 };
 
-function determineMode(req): boolean {
-  console.log(req.query.location + "REQ QUERY");
-
-  return true;
+function usingCity(req): boolean {
+  console.log(req);
+  console.log(req.query + "REQ QUERY");
+  if (req.query.city) {
+    return true;
+  } else {
+    return false;
+  }
 }
 
 function throwError(res) {
   res.statusCode = 400;
   return res.json({ error: "Unexpected error" });
 }
+
+// NEED ERROR PROTECTION IN FRONTEND FOR NO CITY / LOCATION
