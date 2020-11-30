@@ -151,52 +151,54 @@ export default class Home extends Component<HomeProps, HomeState> {
 
   getData = async (mode) => {
     try {
-      let apiUrl = `${process.env.API_ENDPOINT}/get/current-weather/?`;
+      let apiUrl = `${process.env.API_ENDPOINT}/get/current-weather/`;
       if (mode === "city") {
         apiUrl += `q=${this.state.weatherLookup.city}`;
       } else {
         apiUrl += `lat=${this.state.weatherLookup.location.lat}&lon=${this.state.weatherLookup.location.long}`;
       }
-      // const apiUrl = `${process.env.API_ENDPOINT}/get/current-weather/${this.state.weatherLookup}`;
       console.log(apiUrl);
-      await fetch(apiUrl)
-        .then((response) => response.json())
-        .then((data) => {
-          console.log(data);
-          this.setState((prevState) => ({
-            weatherData: {
-              ...prevState.weatherData,
-              temp: {
-                ...prevState.weatherData.temp,
-                current: data.main.temp,
-                high: data.main.temp_max,
-                low: data.main.temp_min,
-                feelsLike: data.main.feels_like,
-              },
-              condition: {
-                ...prevState.weatherData.condition,
-                main: data.weather[0].main,
-                description: data.weather[0].description,
-              },
-              sunrise: data.sys.sunrise,
-              sunset: data.sys.sunset,
-              wind: {
-                ...prevState.weatherData.wind,
-                speed: data.wind.speed,
-                deg: data.wind.deg,
-              },
-              humidity: data.main.humidity,
-              visibility: data.visibility,
-              timezone: data.timezone,
-              cityName: data.name,
-              coords: {
-                ...prevState.weatherData.coords,
-                lat: data.coord.lat,
-                long: data.coord.lon,
-              },
+      const response = await fetch(apiUrl, {
+        method: "GET",
+        mode: "same-origin",
+      });
+      // Place in seperate function
+      response.json().then((data) => {
+        console.log(data);
+        this.setState((prevState) => ({
+          weatherData: {
+            ...prevState.weatherData,
+            temp: {
+              ...prevState.weatherData.temp,
+              current: data.main.temp,
+              high: data.main.temp_max,
+              low: data.main.temp_min,
+              feelsLike: data.main.feels_like,
             },
-          }));
-        });
+            condition: {
+              ...prevState.weatherData.condition,
+              main: data.weather[0].main,
+              description: data.weather[0].description,
+            },
+            sunrise: data.sys.sunrise,
+            sunset: data.sys.sunset,
+            wind: {
+              ...prevState.weatherData.wind,
+              speed: data.wind.speed,
+              deg: data.wind.deg,
+            },
+            humidity: data.main.humidity,
+            visibility: data.visibility,
+            timezone: data.timezone,
+            cityName: data.name,
+            coords: {
+              ...prevState.weatherData.coords,
+              lat: data.coord.lat,
+              long: data.coord.lon,
+            },
+          },
+        }));
+      });
     } catch (e) {
       console.error(e);
       // Display error

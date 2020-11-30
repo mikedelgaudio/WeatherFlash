@@ -1,6 +1,10 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 
 export default async (req, res) => {
+  if (req.method !== "GET") {
+    return throwError(res);
+  }
+
   let search: string = "";
   let city: string = "New York";
   let lat: number = 0;
@@ -22,10 +26,13 @@ export default async (req, res) => {
   res.json(json);
 };
 
-function determineMode(query): boolean {
-  console.log(query.params);
-  console.log(query);
-  //console.log(JSON.stringify(query.location.weatherLookup));
+function determineMode(req): boolean {
+  console.log(req.query.location + "REQ QUERY");
 
   return true;
+}
+
+function throwError(res) {
+  res.statusCode = 400;
+  return res.json({ error: "Unexpected error" });
 }
