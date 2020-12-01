@@ -25,8 +25,6 @@ export default async (req, res) => {
 };
 
 function usingCity(req): boolean {
-  console.log(req);
-  console.log(req.query + "REQ QUERY");
   if (req.query.city) {
     return true;
   } else {

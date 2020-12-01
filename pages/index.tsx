@@ -26,8 +26,9 @@ interface HomeState {
       feelsLike: number;
     };
     condition: {
-      main: "N/A";
-      description: "N/A";
+      main: string;
+      description: string;
+      icon: string;
     };
     sunrise: number;
     sunset: number;
@@ -43,6 +44,7 @@ interface HomeState {
   };
   tempMode: string;
   userSearched: boolean;
+  loading: boolean;
 }
 
 export default class Home extends Component<HomeProps, HomeState> {
@@ -68,6 +70,7 @@ export default class Home extends Component<HomeProps, HomeState> {
         condition: {
           main: "N/A",
           description: "N/A",
+          icon: "",
         },
         sunrise: 0,
         sunset: 0,
@@ -80,6 +83,7 @@ export default class Home extends Component<HomeProps, HomeState> {
       },
       tempMode: "F",
       userSearched: false,
+      loading: false,
     };
   }
 
@@ -96,6 +100,9 @@ export default class Home extends Component<HomeProps, HomeState> {
     } else {
       this.getData("city");
     }
+    this.setState({
+      loading: true,
+    });
 
     ///e.target.reset();
   };
@@ -199,6 +206,9 @@ export default class Home extends Component<HomeProps, HomeState> {
           },
         }));
       });
+      this.setState({
+        loading: false,
+      });
     } catch (e) {
       console.error(e);
       // Display error
@@ -232,6 +242,7 @@ export default class Home extends Component<HomeProps, HomeState> {
                   weatherData={this.state.weatherData}
                   weatherLookup={this.state.weatherLookup}
                   tempMode={this.state.tempMode}
+                  loading={this.state.loading}
                 />
               )}
           </div>
