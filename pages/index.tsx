@@ -164,48 +164,59 @@ export default class Home extends Component<HomeProps, HomeState> {
       } else {
         apiUrl += `lat=${this.state.weatherLookup.location.lat}&lon=${this.state.weatherLookup.location.long}`;
       }
-      console.log(apiUrl);
+
       const response = await fetch(apiUrl, {
         method: "GET",
         mode: "same-origin",
       });
-      // Place in seperate function
-      response.json().then((data) => {
-        console.log(data);
-        this.setState((prevState) => ({
-          weatherData: {
-            ...prevState.weatherData,
-            temp: {
-              ...prevState.weatherData.temp,
-              current: data.main.temp,
-              high: data.main.temp_max,
-              low: data.main.temp_min,
-              feelsLike: data.main.feels_like,
+
+      if (response.status !== 200) {
+        // We had an error handler
+        if (response.status === 404) {
+          this.setState({
+            errorMsg: `Sorry, the location / city is unable to be found. Please try again.`,
+          });
+        }
+      } else {
+        this.resetError();
+        // Successful response
+        response.json().then((data) => {
+          this.setState((prevState) => ({
+            weatherData: {
+              ...prevState.weatherData,
+              temp: {
+                ...prevState.weatherData.temp,
+                current: data.main.temp,
+                high: data.main.temp_max,
+                low: data.main.temp_min,
+                feelsLike: data.main.feels_like,
+              },
+              condition: {
+                ...prevState.weatherData.condition,
+                main: data.weather[0].main,
+                description: data.weather[0].description,
+              },
+              sunrise: data.sys.sunrise,
+              sunset: data.sys.sunset,
+              wind: {
+                ...prevState.weatherData.wind,
+                speed: data.wind.speed,
+                deg: data.wind.deg,
+              },
+              humidity: data.main.humidity,
+              visibility: data.visibility,
+              timezone: data.timezone,
+              cityName: data.name,
+              coords: {
+                ...prevState.weatherData.coords,
+                lat: data.coord.lat,
+                long: data.coord.lon,
+              },
             },
-            condition: {
-              ...prevState.weatherData.condition,
-              main: data.weather[0].main,
-              description: data.weather[0].description,
-            },
-            sunrise: data.sys.sunrise,
-            sunset: data.sys.sunset,
-            wind: {
-              ...prevState.weatherData.wind,
-              speed: data.wind.speed,
-              deg: data.wind.deg,
-            },
-            humidity: data.main.humidity,
-            visibility: data.visibility,
-            timezone: data.timezone,
-            cityName: data.name,
-            coords: {
-              ...prevState.weatherData.coords,
-              lat: data.coord.lat,
-              long: data.coord.lon,
-            },
-          },
-        }));
-      });
+          }));
+        });
+      }
+
       this.setState({
         loading: false,
       });
@@ -213,6 +224,12 @@ export default class Home extends Component<HomeProps, HomeState> {
       console.error(e);
       // Display error
     }
+  };
+
+  resetError = () => {
+    this.setState({
+      errorMsg: "",
+    });
   };
 
   public render() {
@@ -225,7 +242,7 @@ export default class Home extends Component<HomeProps, HomeState> {
 
         <main className={styles.main}>
           <div className="container">
-            {!this.state.userSearched && <WelcomeHeroBanner />}
+            {(!this.state.userSearched || this.state.errorMsg !== "") && <WelcomeHeroBanner />}
 
             <Search
               handleLocation={this.handleLocation}
@@ -235,8 +252,9 @@ export default class Home extends Component<HomeProps, HomeState> {
               placeholder={this.state.placeholder}
             />
 
-            {(this.state.weatherLookup.location.lat !== 0 ||
-              this.state.weatherLookup.city !== "") &&
+            {this.state.errorMsg === "" &&
+              (this.state.weatherLookup.location.lat !== 0 ||
+                this.state.weatherLookup.city !== "") &&
               this.state.userSearched && (
                 <WeatherCard
                   weatherData={this.state.weatherData}

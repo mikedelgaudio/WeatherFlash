@@ -20,7 +20,9 @@ export default async (req, res) => {
 
   const fetched = await fetch(url);
   const json = await fetched.json();
-  res.statusCode = 200;
+  res.statusCode = fetched.status;
+  console.warn(res.statusCode);
+  console.log(json);
   res.json(json);
 };
 
