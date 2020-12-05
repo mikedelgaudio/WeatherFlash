@@ -61,6 +61,7 @@ export default class WeatherCard extends Component<any> {
         break;
     }
   };
+  // /https://stackoverflow.com/questions/49497270/autocomplete-only-city-name-list-using-google-maps-api
 
   displayCard = () => {
     return (
