@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Component } from "react";
 import styles from "./search.module.scss";
 
-class Search extends Component<any> {
+class Search extends Component<any, any> {
   constructor(props) {
     super(props);
   }
@@ -15,13 +15,13 @@ class Search extends Component<any> {
   render() {
     return (
       <div className={styles.searchForm}>
-        <form onSubmit={this.props.handleSearch}>
+        <form onSubmit={this.props.handleSearch} id="weatherLookupForm">
           <div className="input-group">
             <label htmlFor="weatherLookup">{this.props.placeholder}</label>
             <input
               name="weatherLookup"
-              id="weatherLookupField"
               type="text"
+              id="weatherLookupField"
               className="form-control"
               placeholder={this.props.placeholder}
               onChange={this.props.handleUserInput}

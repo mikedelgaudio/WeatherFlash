@@ -6,48 +6,7 @@ import WeatherCard from "../components/weather-card/weather-card";
 import WelcomeHeroBanner from "../components/welcome-hero-banner/welcome-hero-banner";
 import styles from "../styles/Home.module.scss";
 
-interface HomeProps {}
-
-interface HomeState {
-  weatherLookup: {
-    city: string;
-    location: {
-      lat: number;
-      long: number;
-    };
-  };
-  placeholder: string;
-  errorMsg: string;
-  weatherData: {
-    temp: {
-      current: number;
-      high: number;
-      low: number;
-      feelsLike: number;
-    };
-    condition: {
-      main: string;
-      description: string;
-      icon: string;
-    };
-    sunrise: number;
-    sunset: number;
-    wind: {
-      speed: number;
-      deg: number;
-    };
-    humidity: number;
-    visibility: number;
-    timezone: number;
-    cityName: string;
-    coords: { lat: number; long: number };
-  };
-  tempMode: string;
-  userSearched: boolean;
-  loading: boolean;
-}
-
-export default class Home extends Component<HomeProps, HomeState> {
+export default class Home extends Component<any, any> {
   constructor(props: any) {
     super(props);
     this.state = {
@@ -88,7 +47,6 @@ export default class Home extends Component<HomeProps, HomeState> {
   }
 
   handleSearch = (e) => {
-    console.log("Hit the search");
     e.preventDefault();
     const elementID = e.currentTarget.id;
     this.setState({
@@ -103,8 +61,8 @@ export default class Home extends Component<HomeProps, HomeState> {
     this.setState({
       loading: true,
     });
-
-    ///e.target.reset();
+    const forms = document.getElementById("weatherLookupForm") as HTMLFormElement;
+    forms.reset();
   };
 
   handleLocation = () => {
@@ -140,8 +98,6 @@ export default class Home extends Component<HomeProps, HomeState> {
         },
       },
     }));
-
-    console.log(this.state.weatherLookup.location);
   };
 
   errorCoor = (err) => {

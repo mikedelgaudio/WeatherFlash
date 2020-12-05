@@ -1,5 +1,3 @@
-// Next.js API route support: https://nextjs.org/docs/api-routes/introduction
-
 export default async (req, res) => {
   if (req.method !== "GET") {
     return throwError(res);
@@ -21,8 +19,6 @@ export default async (req, res) => {
   const fetched = await fetch(url);
   const json = await fetched.json();
   res.statusCode = fetched.status;
-  console.warn(res.statusCode);
-  console.log(json);
   res.json(json);
 };
 
@@ -38,5 +34,3 @@ function throwError(res) {
   res.statusCode = 400;
   return res.json({ error: "Unexpected error" });
 }
-
-// NEED ERROR PROTECTION IN FRONTEND FOR NO CITY / LOCATION
