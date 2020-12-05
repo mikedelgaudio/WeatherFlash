@@ -3,10 +3,6 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Component } from "react";
 import styles from "./search.module.scss";
 
-interface SearchProps {}
-
-interface SearchState {}
-
 class Search extends Component<any> {
   constructor(props) {
     super(props);

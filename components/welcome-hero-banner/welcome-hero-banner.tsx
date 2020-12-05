@@ -3,14 +3,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Component } from "react";
 import styles from "./welcome-hero-banner.module.scss";
 
-interface MyProps {}
-
-interface MyState {
-  title: string;
-  subtitle: string;
-}
-
-export default class WelcomeHeroBanner extends Component<MyProps, MyState> {
+export default class WelcomeHeroBanner extends Component<any, any> {
   constructor(props) {
     super(props);
     this.state = {

@@ -242,7 +242,7 @@ export default class Home extends Component<HomeProps, HomeState> {
 
         <main className={styles.main}>
           <div className="container">
-            {(!this.state.userSearched || this.state.errorMsg !== "") && <WelcomeHeroBanner />}
+            <WelcomeHeroBanner userSearched={this.state.userSearched} />
 
             <Search
               handleLocation={this.handleLocation}
