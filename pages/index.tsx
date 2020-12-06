@@ -60,10 +60,12 @@ export default class Home extends Component<any, any> {
           this.errorCoor(err);
         });
 
-      this.getData("coord");
+      await this.getData("coord");
     } else {
-      this.getData("city");
+      await this.getData("city");
     }
+
+    this.determineIcon();
 
     const forms = document.getElementById("weatherLookupForm") as HTMLFormElement;
     forms.reset();
@@ -119,6 +121,53 @@ export default class Home extends Component<any, any> {
     }
   };
 
+  //https://openweathermap.org/weather-conditions
+  determineIcon = () => {
+    let iconPath: string = "";
+    switch (this.state.weatherData.condition.main) {
+      case "Rain":
+        iconPath = "/assets/rain.gif";
+        break;
+      case "Drizzle":
+        iconPath = "/assets/drizzle.gif";
+        break;
+      case "Thunderstorm":
+        iconPath = "/assets/storm.gif";
+        break;
+      case "Clear":
+        iconPath = "/assets/sunny.gif";
+        break;
+      case "Clouds":
+        iconPath = "/assets/clouds.png";
+        break;
+      case "Snow":
+        iconPath = "/assets/snow.gif";
+        break;
+      case "Haze":
+        iconPath = "/assets/haze.png";
+        break;
+      case "Tornado":
+        iconPath = "/assets/tornado.png";
+        break;
+      case "Fog":
+        iconPath = "/assets/fog_night.gif";
+        break;
+      default:
+        iconPath = "/assets/wind.gif";
+        break;
+    }
+
+    this.setState((prevState) => ({
+      weatherData: {
+        ...prevState.weatherData,
+        condition: {
+          ...prevState.weatherData.condition,
+          icon: iconPath,
+        },
+      },
+    }));
+  };
+
   getData = async (mode) => {
     try {
       let apiUrl = `${process.env.API_ENDPOINT}/get/current-weather/location?`;
@@ -161,7 +210,7 @@ export default class Home extends Component<any, any> {
   };
 
   setData = async (response) => {
-    response.json().then((data) => {
+    await response.json().then((data) => {
       this.setState((prevState) => ({
         weatherData: {
           ...prevState.weatherData,
