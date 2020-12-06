@@ -58,11 +58,19 @@ export default class Home extends Component<any, any> {
         })
         .catch((err) => {
           this.errorCoor(err);
+          return;
         });
-
       await this.getData("coord");
     } else {
-      await this.getData("city");
+      const searchField = document.getElementById("weatherLookupField") as HTMLInputElement;
+      if (searchField.value !== "") {
+        await this.getData("city");
+      } else {
+        this.setState({
+          errorMsg: "Please provide a city name or use location.",
+        });
+        return;
+      }
     }
 
     this.determineIcon();
@@ -79,7 +87,11 @@ export default class Home extends Component<any, any> {
         //   timeout: 10000,
         //   enableHighAccuracy: true,
         // });
-        navigator.geolocation.getCurrentPosition(res, rej);
+        navigator.geolocation.getCurrentPosition(res, rej, {
+          maximumAge: 60000,
+          timeout: 10000,
+          enableHighAccuracy: true,
+        });
       });
     } else {
       // Add tooltip location is disabled?
