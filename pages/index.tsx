@@ -259,6 +259,14 @@ export default class Home extends Component<any, any> {
     });
   };
 
+  resetApp = () => {
+    this.setState({
+      errorMsg: "",
+      userSearched: false,
+      loading: false,
+    });
+  };
+
   resetError = () => {
     this.setState({
       errorMsg: "",
@@ -275,7 +283,7 @@ export default class Home extends Component<any, any> {
 
         <main className={styles.main}>
           <div className="container">
-            <WelcomeHeroBanner userSearched={this.state.userSearched} />
+            <WelcomeHeroBanner resetApp={this.resetApp} />
 
             <Search
               handleLocation={this.handleLocation}
