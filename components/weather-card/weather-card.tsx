@@ -2,17 +2,20 @@ import React, { Component } from "react";
 import Moment from "react-moment";
 import Spinner from "../spinner/spinner";
 import styles from "./weather-card.module.scss";
-export default class WeatherCard extends Component<any> {
+export default class WeatherCard extends Component<any, any> {
   constructor(props) {
     super(props);
     this.state = {
       tempMode: this.props.tempMode,
+      icon: "",
     };
   }
 
   componentDidMount() {
     this.determineIcon();
   }
+
+  componentDidUpdate() {}
 
   toCelsius = (fahrenheit) => {
     return ((fahrenheit - 32) * 5) / 9;
@@ -50,16 +53,47 @@ export default class WeatherCard extends Component<any> {
     return arr[val % 16];
   };
 
+  //https://openweathermap.org/weather-conditions
   determineIcon = () => {
+    let iconPath: string = "";
     switch (this.props.weatherData.condition.main) {
       case "Rain":
-        this.props.weatherData.condition.icon = "d";
-        console.log(this.props.weatherData.condition.icon);
+        iconPath = "/assets/rain.gif";
         break;
-
+      case "Drizzle":
+        iconPath = "/assets/drizzle.gif";
+        break;
+      case "Thunderstorm":
+        iconPath = "/assets/storm.gif";
+        break;
+      case "Clear":
+        iconPath = "/assets/sunny.gif";
+        break;
+      case "Clouds":
+        iconPath = "/assets/clouds.png";
+        break;
+      case "Snow":
+        iconPath = "/assets/snow.gif";
+        break;
+      case "Haze":
+        iconPath = "/assets/haze.png";
+        break;
+      case "Tornado":
+        iconPath = "/assets/tornado.png";
+        break;
+      case "Fog":
+        iconPath = "/assets/fog_night.gif";
+        break;
       default:
+        iconPath = "/assets/wind.gif";
         break;
     }
+
+    console.log(iconPath);
+
+    this.setState({
+      icon: iconPath,
+    });
   };
   // /https://stackoverflow.com/questions/49497270/autocomplete-only-city-name-list-using-google-maps-api
 
@@ -69,7 +103,7 @@ export default class WeatherCard extends Component<any> {
         <h1 className={styles.currentlyIn}>Currently in {this.props.weatherData.cityName} </h1>
         <div className="row justify-content-center">
           <div className={styles.todayWrapper}>
-            <img src="/assets/snow.gif" width="120px" height="120px" />
+            <img src={this.state.icon} width="120px" height="120px" />
             <div className="col">
               <div className="row m-0">
                 <h2>
@@ -127,5 +161,3 @@ export default class WeatherCard extends Component<any> {
     );
   }
 }
-
-// Need to ensure this only updates when the user clicks
