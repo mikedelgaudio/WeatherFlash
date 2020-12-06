@@ -8,10 +8,6 @@ class Search extends Component<any, any> {
     super(props);
   }
 
-  componentDidMount() {
-    this.props.handleLocation();
-  }
-
   render() {
     return (
       <div className={styles.searchForm}>

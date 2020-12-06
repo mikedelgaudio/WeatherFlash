@@ -13,12 +13,14 @@ export default async (req, res) => {
     const lon = req.query.lon;
     search = `lat=${lat}&lon=${lon}`;
   }
+  console.log(search);
 
   const url = `https://api.openweathermap.org/data/2.5/weather?${search}&appid=${process.env.API_KEY}&units=imperial`;
 
   const fetched = await fetch(url);
   const json = await fetched.json();
   res.statusCode = fetched.status;
+  console.log("sent");
   res.json(json);
 };
 

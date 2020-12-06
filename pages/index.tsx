@@ -46,35 +46,42 @@ export default class Home extends Component<any, any> {
     };
   }
 
-  handleSearch = (e) => {
+  handleSearch = async (e) => {
     e.preventDefault();
     const elementID = e.currentTarget.id;
-    this.setState({
-      userSearched: true,
-    });
+    this.setState({ loading: true, userSearched: true });
+
     if (elementID === "location") {
-      this.handleLocation();
+      await this.handleLocation()
+        .then((pos) => {
+          this.getCoor(pos);
+        })
+        .catch((err) => {
+          this.errorCoor(err);
+        });
+
       this.getData("coord");
     } else {
       this.getData("city");
     }
-    this.setState({
-      loading: true,
-    });
+
     const forms = document.getElementById("weatherLookupForm") as HTMLFormElement;
     forms.reset();
   };
 
   handleLocation = () => {
     if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(this.getCoor, this.errorCoor, {
-        maximumAge: 60000,
-        timeout: 10000,
-        enableHighAccuracy: true,
+      return new Promise((res, rej) => {
+        // navigator.geolocation.getCurrentPosition(this.getCoor, this.errorCoor, {
+        //   maximumAge: 60000,
+        //   timeout: 10000,
+        //   enableHighAccuracy: true,
+        // });
+        navigator.geolocation.getCurrentPosition(res, rej);
       });
     } else {
       // Add tooltip location is disabled?
-      this.locationFailed();
+      this.errorCoor("general");
     }
   };
 
@@ -102,14 +109,14 @@ export default class Home extends Component<any, any> {
 
   errorCoor = (err) => {
     if (err.message === "User denied Geolocation") {
-      this.locationFailed("You have denied location access");
+      this.setState({
+        errorMsg: `Unable to grab location. You have denied location access.`,
+      });
+    } else {
+      this.setState({
+        errorMsg: `Unable to grab location. Unexpected error occured.`,
+      });
     }
-  };
-
-  locationFailed = (error?) => {
-    this.setState({
-      errorMsg: `Unable to grab location. ${error}.`,
-    });
   };
 
   getData = async (mode) => {
@@ -132,45 +139,16 @@ export default class Home extends Component<any, any> {
           this.setState({
             errorMsg: `Sorry, the location / city is unable to be found. Please try again.`,
           });
+        } else {
+          // Unexpected Error
+          this.setState({
+            errorMsg: `Sorry, an unexpected error occured. Please try again later.`,
+          });
         }
       } else {
         this.resetError();
         // Successful response
-        response.json().then((data) => {
-          this.setState((prevState) => ({
-            weatherData: {
-              ...prevState.weatherData,
-              temp: {
-                ...prevState.weatherData.temp,
-                current: data.main.temp,
-                high: data.main.temp_max,
-                low: data.main.temp_min,
-                feelsLike: data.main.feels_like,
-              },
-              condition: {
-                ...prevState.weatherData.condition,
-                main: data.weather[0].main,
-                description: data.weather[0].description,
-              },
-              sunrise: data.sys.sunrise,
-              sunset: data.sys.sunset,
-              wind: {
-                ...prevState.weatherData.wind,
-                speed: data.wind.speed,
-                deg: data.wind.deg,
-              },
-              humidity: data.main.humidity,
-              visibility: data.visibility,
-              timezone: data.timezone,
-              cityName: data.name,
-              coords: {
-                ...prevState.weatherData.coords,
-                lat: data.coord.lat,
-                long: data.coord.lon,
-              },
-            },
-          }));
-        });
+        await this.setData(response);
       }
 
       this.setState({
@@ -180,6 +158,44 @@ export default class Home extends Component<any, any> {
       console.error(e);
       // Display error
     }
+  };
+
+  setData = async (response) => {
+    response.json().then((data) => {
+      this.setState((prevState) => ({
+        weatherData: {
+          ...prevState.weatherData,
+          temp: {
+            ...prevState.weatherData.temp,
+            current: data.main.temp,
+            high: data.main.temp_max,
+            low: data.main.temp_min,
+            feelsLike: data.main.feels_like,
+          },
+          condition: {
+            ...prevState.weatherData.condition,
+            main: data.weather[0].main,
+            description: data.weather[0].description,
+          },
+          sunrise: data.sys.sunrise,
+          sunset: data.sys.sunset,
+          wind: {
+            ...prevState.weatherData.wind,
+            speed: data.wind.speed,
+            deg: data.wind.deg,
+          },
+          humidity: data.main.humidity,
+          visibility: data.visibility,
+          timezone: data.timezone,
+          cityName: data.name,
+          coords: {
+            ...prevState.weatherData.coords,
+            lat: data.coord.lat,
+            long: data.coord.lon,
+          },
+        },
+      }));
+    });
   };
 
   resetError = () => {
@@ -208,17 +224,14 @@ export default class Home extends Component<any, any> {
               placeholder={this.state.placeholder}
             />
 
-            {this.state.errorMsg === "" &&
-              (this.state.weatherLookup.location.lat !== 0 ||
-                this.state.weatherLookup.city !== "") &&
-              this.state.userSearched && (
-                <WeatherCard
-                  weatherData={this.state.weatherData}
-                  weatherLookup={this.state.weatherLookup}
-                  tempMode={this.state.tempMode}
-                  loading={this.state.loading}
-                />
-              )}
+            {this.state.errorMsg === "" && this.state.userSearched && (
+              <WeatherCard
+                weatherData={this.state.weatherData}
+                weatherLookup={this.state.weatherLookup}
+                tempMode={this.state.tempMode}
+                loading={this.state.loading}
+              />
+            )}
           </div>
         </main>
 
@@ -227,3 +240,15 @@ export default class Home extends Component<any, any> {
     );
   }
 }
+
+/**
+ * <!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-8V07L1WK67"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-8V07L1WK67');
+</script>
+ */
