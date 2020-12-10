@@ -198,7 +198,7 @@ export default class Home extends Component<any, any> {
         // We had an error handler
         if (response.status === 404) {
           this.setState({
-            errorMsg: `Sorry, the location / city is unable to be found. Please try again.`,
+            errorMsg: `Sorry, the city is unable to be found. Please try again for example, current support is limited to certain cities.`,
           });
         } else {
           // Unexpected Error
