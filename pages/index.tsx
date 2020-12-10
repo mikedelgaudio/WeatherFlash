@@ -191,7 +191,6 @@ export default class Home extends Component<any, any> {
 
       const response = await fetch(apiUrl, {
         method: "GET",
-        mode: "same-origin",
       });
 
       if (response.status !== 200) {

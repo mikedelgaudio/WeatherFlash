@@ -3,7 +3,7 @@ FROM node:alpine
 RUN mkdir -p /usr/src
 WORKDIR /usr/src
 ENV API_KEY=YOUR_API_KEY
-ENV API_ENDPOINT=http://localhost/api
+ENV API_ENDPOINT=https://weatherflash.delgaudiomike.com/api
 
 COPY . /usr/src
 
