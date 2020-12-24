@@ -24,7 +24,6 @@ export default class WeatherCard extends Component<any, any> {
 
   toDirection = (degrees) => {
     const val = Math.floor(degrees / 22.5 + 0.5);
-    console.log(degrees);
     const arr = [
       "N",
       "NNE",
@@ -54,9 +53,9 @@ export default class WeatherCard extends Component<any, any> {
         <h1 className={styles.currentlyIn}>Currently in {this.props.weatherData.cityName} </h1>
         <div className="row justify-content-center">
           <div className={styles.todayWrapper}>
-            <img src={this.props.weatherData.condition.icon} width="120px" height="120px" />
+            <img src={this.props.weatherData.condition.icon} />
             <div className="col">
-              <div className="row m-0">
+              <div className="row m-0 justify-content-center align-items-center">
                 <h2>
                   {this.props.weatherData.temp.current.toFixed()}&deg;
                   {this.props.tempMode}
