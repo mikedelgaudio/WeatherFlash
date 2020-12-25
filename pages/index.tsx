@@ -1,5 +1,6 @@
 import Head from "next/head";
 import React, { Component } from "react";
+import { isMobile } from "react-device-detect";
 import { Footer } from "../components/footer/footer";
 import Search from "../components/search/search";
 import WeatherCard from "../components/weather-card/weather-card";
@@ -82,11 +83,6 @@ export default class Home extends Component<any, any> {
   handleLocation = () => {
     if (navigator.geolocation) {
       return new Promise((res, rej) => {
-        // navigator.geolocation.getCurrentPosition(this.getCoor, this.errorCoor, {
-        //   maximumAge: 60000,
-        //   timeout: 10000,
-        //   enableHighAccuracy: true,
-        // });
         navigator.geolocation.getCurrentPosition(res, rej, {
           maximumAge: 60000,
           timeout: 10000,
@@ -125,6 +121,10 @@ export default class Home extends Component<any, any> {
     if (err.message === "User denied Geolocation") {
       this.setState({
         errorMsg: `Unable to grab location. You have denied location access.`,
+      });
+    } else if (isMobile) {
+      this.setState({
+        errorMsg: `Support for mobile location has not been implemented yet :)`,
       });
     } else {
       this.setState({
