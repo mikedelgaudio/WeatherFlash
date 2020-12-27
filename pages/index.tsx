@@ -59,8 +59,9 @@ export default class Home extends Component<any, any> {
         })
         .catch((err) => {
           this.errorCoor(err);
-          return;
+          return Promise.reject("Cannot gather location");
         });
+
       await this.getData("coord");
     } else {
       const searchField = document.getElementById("weatherLookupField") as HTMLInputElement;
