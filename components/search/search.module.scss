@@ -1,6 +1,7 @@
 .searchForm {
   input[type="text"] {
-    width: 25%;
+    width: 100%;
+    height: 100%;
     border: none;
     border-bottom: 2px solid var(--light-gray);
     font-size: 16px;
@@ -10,6 +11,10 @@
   }
   input[type="text"]:focus {
     color: var(--dark-bg);
+  }
+
+  div[role="combobox"] {
+    width: 100%;
   }
 
   label {
