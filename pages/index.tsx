@@ -39,6 +39,7 @@ export default class Home extends Component<any, any> {
         visibility: 0,
         timezone: 0,
         cityName: "N/A",
+        cityId: 0,
         coords: { lat: 0, long: 0 },
       },
       tempMode: "F",
@@ -207,9 +208,10 @@ export default class Home extends Component<any, any> {
           });
         }
       } else {
-        this.resetError();
         // Successful response
+        this.resetError();
         await this.setData(response);
+        // await this.setStateName();
       }
 
       this.setState({
@@ -223,6 +225,7 @@ export default class Home extends Component<any, any> {
 
   setData = async (response) => {
     await response.json().then((data) => {
+      console.log(data);
       this.setState((prevState) => ({
         weatherData: {
           ...prevState.weatherData,
@@ -249,6 +252,7 @@ export default class Home extends Component<any, any> {
           visibility: data.visibility,
           timezone: data.timezone,
           cityName: data.name,
+          cityId: data.id,
           coords: {
             ...prevState.weatherData.coords,
             lat: data.coord.lat,
