@@ -83,7 +83,6 @@ export default class Home extends Component<any, any> {
     this.setState({
       loading: false,
     });
-
     const forms = document.getElementById("weatherLookupForm") as HTMLFormElement;
     forms.reset();
   };
