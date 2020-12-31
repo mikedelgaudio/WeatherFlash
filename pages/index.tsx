@@ -39,6 +39,7 @@ export default class Home extends Component<any, any> {
         visibility: 0,
         timezone: 0,
         cityName: "N/A",
+        stateName: "",
         cityId: 0,
         coords: { lat: 0, long: 0 },
       },
@@ -221,6 +222,11 @@ export default class Home extends Component<any, any> {
       console.error(e);
       // Display error
     }
+  };
+
+  getStateDate = async () => {
+    try {
+    } catch (err) {}
   };
 
   setData = async (response) => {
