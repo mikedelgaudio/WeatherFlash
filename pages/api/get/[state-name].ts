@@ -6,11 +6,13 @@ export default async (req, res) => {
     return throwError(res);
   }
 
-  if (!req.query.cityId) {
+  const reqCityId = req.query.cityId;
+
+  if (!reqCityId || isNaN(reqCityId)) {
     return throwError(res);
   }
 
-  let cityRes = "";
+  let cityRes = [];
 
   try {
     const cityData = await fs.readFile(path.resolve("models/city.list.min.json"), "utf8");
@@ -19,8 +21,11 @@ export default async (req, res) => {
     console.error(err);
   }
 
+  const cityObj = cityRes.find((city) => city.id === parseInt(reqCityId)) || "";
+  const stateName = cityObj.state;
+
   res.statusCode = 200;
-  res.json({ cityId: req.query.cityId, info: cityRes });
+  res.json({ cityId: reqCityId, state: stateName });
 };
 
 function throwError(res) {
