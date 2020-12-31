@@ -65,10 +65,12 @@ export default class Home extends Component<any, any> {
         });
 
       await this.getData("coord");
+      await this.getStateData();
     } else {
       const searchField = document.getElementById("weatherLookupField") as HTMLInputElement;
       if (searchField.value !== "") {
         await this.getData("city");
+        await this.getStateData();
       } else {
         this.setState({
           errorMsg: "Please provide a city name or use location.",
@@ -212,7 +214,6 @@ export default class Home extends Component<any, any> {
         // Successful response
         this.resetError();
         await this.setData(response);
-        // await this.setStateName();
       }
 
       this.setState({
@@ -224,14 +225,8 @@ export default class Home extends Component<any, any> {
     }
   };
 
-  getStateDate = async () => {
-    try {
-    } catch (err) {}
-  };
-
   setData = async (response) => {
     await response.json().then((data) => {
-      console.log(data);
       this.setState((prevState) => ({
         weatherData: {
           ...prevState.weatherData,
@@ -264,6 +259,36 @@ export default class Home extends Component<any, any> {
             lat: data.coord.lat,
             long: data.coord.lon,
           },
+        },
+      }));
+    });
+  };
+
+  getStateData = async () => {
+    try {
+      const apiUrl = `${process.env.API_ENDPOINT}/get/state-name?cityId=${this.state.weatherData.cityId}`;
+
+      const response = await fetch(apiUrl, {
+        method: "GET",
+      });
+
+      if (response.status !== 200) {
+        // We have an error so just set state to nothing
+        return;
+      }
+
+      await this.setStateData(response);
+    } catch (err) {
+      console.error(new Error("Unable to find state name."));
+    }
+  };
+
+  setStateData = async (response) => {
+    await response.json().then((data) => {
+      this.setState((prevState) => ({
+        weatherData: {
+          ...prevState.weatherData,
+          stateName: data.state,
         },
       }));
     });

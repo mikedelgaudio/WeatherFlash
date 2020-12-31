@@ -50,7 +50,9 @@ export default class WeatherCard extends Component<any, any> {
   displayCard = () => {
     return (
       <div>
-        <h1 className={styles.currentlyIn}>Currently in {this.props.weatherData.cityName} </h1>
+        <h1 className={styles.currentlyIn}>
+          Currently in {this.props.weatherData.cityName} {this.props.weatherData.stateName}
+        </h1>
         <div className="row justify-content-center">
           <div className={styles.todayWrapper}>
             <img src={this.props.weatherData.condition.icon} />
