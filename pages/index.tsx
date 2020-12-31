@@ -80,6 +80,9 @@ export default class Home extends Component<any, any> {
     }
 
     this.determineIcon();
+    this.setState({
+      loading: false,
+    });
 
     const forms = document.getElementById("weatherLookupForm") as HTMLFormElement;
     forms.reset();
@@ -215,10 +218,6 @@ export default class Home extends Component<any, any> {
         this.resetError();
         await this.setData(response);
       }
-
-      this.setState({
-        loading: false,
-      });
     } catch (e) {
       console.error(e);
       // Display error

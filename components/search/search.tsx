@@ -1,7 +1,6 @@
 import { faLocationArrow, faSearch } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Component } from "react";
-import Autosuggest from "react-autosuggest";
 import styles from "./search.module.scss";
 
 const cities = [{ name: "New York" }, { name: "Cupertino" }];
@@ -69,15 +68,15 @@ class Search extends Component<any, any> {
         <form onSubmit={this.props.handleSearch} id="weatherLookupForm">
           <div className="input-group flex-nowrap">
             <label htmlFor="weatherLookup">{this.props.placeholder}</label>
-            {/* <input
+            <input
               name="weatherLookup"
               type="text"
               id="weatherLookupField"
               className="form-control"
               placeholder={this.props.placeholder}
               onChange={this.props.handleUserInput}
-            /> */}
-            <Autosuggest
+            />
+            {/* <Autosuggest
               name="weatherLookup"
               type="text"
               id="weatherLookupField"
@@ -88,7 +87,7 @@ class Search extends Component<any, any> {
               getSuggestionValue={getSuggestionValue}
               renderSuggestion={renderSuggestion}
               inputProps={inputProps}
-            />
+            /> */}
 
             <div className="input-group-append">
               <button
