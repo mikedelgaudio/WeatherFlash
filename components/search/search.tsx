@@ -7,12 +7,11 @@ class Search extends Component<any, any> {
   constructor(props) {
     super(props);
   }
-
   render() {
     return (
       <div className={styles.searchForm}>
         <form onSubmit={this.props.handleSearch} id="weatherLookupForm">
-          <div className="input-group">
+          <div className="input-group flex-nowrap">
             <label htmlFor="weatherLookup">{this.props.placeholder}</label>
             <input
               name="weatherLookup"

@@ -2,7 +2,7 @@ FROM node:alpine
 RUN mkdir -p /usr/src
 WORKDIR /usr/src
 ARG arg_API_KEY
-ARG arg_API_ENDPOIN
+ARG arg_API_ENDPOINT
 ENV API_KEY=${arg_API_KEY}
 ENV API_ENDPOINT=${arg_API_ENDPOINT}
 

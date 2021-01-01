@@ -39,6 +39,8 @@ export default class Home extends Component<any, any> {
         visibility: 0,
         timezone: 0,
         cityName: "N/A",
+        stateName: "",
+        cityId: 0,
         coords: { lat: 0, long: 0 },
       },
       tempMode: "F",
@@ -63,10 +65,12 @@ export default class Home extends Component<any, any> {
         });
 
       await this.getData("coord");
+      await this.getStateData();
     } else {
       const searchField = document.getElementById("weatherLookupField") as HTMLInputElement;
       if (searchField.value !== "") {
         await this.getData("city");
+        await this.getStateData();
       } else {
         this.setState({
           errorMsg: "Please provide a city name or use location.",
@@ -76,7 +80,9 @@ export default class Home extends Component<any, any> {
     }
 
     this.determineIcon();
-
+    this.setState({
+      loading: false,
+    });
     const forms = document.getElementById("weatherLookupForm") as HTMLFormElement;
     forms.reset();
   };
@@ -207,14 +213,10 @@ export default class Home extends Component<any, any> {
           });
         }
       } else {
-        this.resetError();
         // Successful response
+        this.resetError();
         await this.setData(response);
       }
-
-      this.setState({
-        loading: false,
-      });
     } catch (e) {
       console.error(e);
       // Display error
@@ -249,11 +251,42 @@ export default class Home extends Component<any, any> {
           visibility: data.visibility,
           timezone: data.timezone,
           cityName: data.name,
+          cityId: data.id,
           coords: {
             ...prevState.weatherData.coords,
             lat: data.coord.lat,
             long: data.coord.lon,
           },
+        },
+      }));
+    });
+  };
+
+  getStateData = async () => {
+    try {
+      const apiUrl = `${process.env.API_ENDPOINT}/get/state-name?cityId=${this.state.weatherData.cityId}`;
+
+      const response = await fetch(apiUrl, {
+        method: "GET",
+      });
+
+      if (response.status !== 200) {
+        // We have an error so just set state to nothing
+        return;
+      }
+
+      await this.setStateData(response);
+    } catch (err) {
+      console.error(new Error("Unable to find state name."));
+    }
+  };
+
+  setStateData = async (response) => {
+    await response.json().then((data) => {
+      this.setState((prevState) => ({
+        weatherData: {
+          ...prevState.weatherData,
+          stateName: data.state,
         },
       }));
     });
