@@ -18,19 +18,15 @@ export default async (req, res) => {
     const cityData = await fs.readFile(path.resolve("models/city.list.min.json"), "utf8");
     cityRes = JSON.parse(cityData);
   } catch (err) {
-    console.error(err);
+    return throwError(res);
   }
 
-  let x = cityRes.filter((obj) => {
-    return obj.name.toLowerCase().includes(reqCityInput.toLowerCase());
-  });
-
-  //const cityObj = cityRes.find((city) => city.id === reqInput) || "";
-  // const stateName = cityObj.state;
+  const trimmedSearch = Array.from(
+    filter(cityRes, (obj) => obj.name.toLowerCase().includes(reqCityInput.toLowerCase()), 3)
+  );
 
   res.statusCode = 200;
-  res.json({ val: x });
-  //res.json({ cityId: reqCityId, state: stateName });
+  res.json({ results: trimmedSearch });
 };
 
 function throwError(res) {
@@ -38,15 +34,17 @@ function throwError(res) {
   return res.json({ error: "Unexpected error" });
 }
 
-/*
-    {
-        "id": 62854,
-        "name": "Ceek",
-        "state": "NY",
-        "country": "SO",
-        "coord": {
-            "lon": 45.358238,
-            "lat": 8.99907
-        }
-    },
-*/
+function* filter(array, condition, maxSize) {
+  if (!maxSize || maxSize > array.length) {
+    maxSize = array.length;
+  }
+  let count = 0;
+  let i = 0;
+  while (count < maxSize && i < array.length) {
+    if (condition(array[i])) {
+      yield array[i];
+      count++;
+    }
+    i++;
+  }
+}
