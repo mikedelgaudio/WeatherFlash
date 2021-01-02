@@ -52,6 +52,16 @@ class Search extends Component<any, any> {
             <span>{this.props.errorMsg}</span>
           </div>
         )}
+
+        <div className={styles.searchResultsWrapper}>
+          <ul className={styles.searchResultsList}>
+            <li className={styles.searchResultsItem}>Hoboken, NJ US</li>
+            <hr></hr>
+            <li className={styles.searchResultsItem}>New York, NY US</li>
+            <hr></hr>
+            <li className={styles.searchResultsItem}>Cupertino, CA US</li>
+          </ul>
+        </div>
       </div>
     );
   }

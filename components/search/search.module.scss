@@ -1,3 +1,5 @@
+$dropdown-border-radius: 25px;
+
 .searchForm {
   input[type="text"] {
     width: 100%;
@@ -34,5 +36,39 @@
     margin: 1rem;
     border-radius: 10px;
     padding: 1rem;
+  }
+
+  .searchResultsWrapper {
+    position: relative;
+    opacity: 1;
+    z-index: 0;
+    display: block;
+    background-color: #f7f7f7;
+    border: 1px solid #00000047;
+    border-top: none;
+    border-bottom-left-radius: $dropdown-border-radius;
+    border-bottom-right-radius: $dropdown-border-radius;
+  }
+
+  .searchResultsList {
+    list-style: none;
+    font-weight: 500;
+    margin-bottom: 0;
+    padding-left: 0;
+    hr {
+      margin: 0;
+    }
+  }
+
+  .searchResultsItem {
+    padding: 1em 0 1em 0.75em;
+    &:hover {
+      cursor: pointer;
+      background-color: #ececec;
+      &:last-child {
+        border-bottom-left-radius: $dropdown-border-radius;
+        border-bottom-right-radius: $dropdown-border-radius;
+      }
+    }
   }
 }
