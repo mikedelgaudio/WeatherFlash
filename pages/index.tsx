@@ -46,6 +46,7 @@ export default class Home extends Component<any, any> {
       tempMode: "F",
       userSearched: false,
       loading: false,
+      displayDropdown: false,
     };
   }
 
@@ -108,7 +109,16 @@ export default class Home extends Component<any, any> {
         ...prevState.weatherLookup,
         city: e.target.value,
       },
+      ...prevState.displayDropdown,
+      displayDropdown: true,
     }));
+
+    if (e.target.value === "") {
+      this.setState((prevState) => ({
+        ...prevState.displayDropdown,
+        displayDropdown: false,
+      }));
+    }
   };
 
   getCoor = (pos) => {
@@ -324,6 +334,7 @@ export default class Home extends Component<any, any> {
               handleUserInput={this.handleUserInput}
               errorMsg={this.state.errorMsg}
               placeholder={this.state.placeholder}
+              displayDropdown={this.state.displayDropdown}
             />
 
             {this.state.errorMsg === "" && this.state.userSearched && (

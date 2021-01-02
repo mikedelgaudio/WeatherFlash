@@ -7,6 +7,12 @@ class Search extends Component<any, any> {
   constructor(props) {
     super(props);
   }
+
+  colorState = (e) => {
+    console.log(e.target);
+    e.target.classList.add(styles.selected);
+  };
+
   render() {
     return (
       <div className={styles.searchForm}>
@@ -46,22 +52,30 @@ class Search extends Component<any, any> {
             </div>
           </div>
         </form>
+
+        {this.props.displayDropdown && (
+          <div className={styles.searchResultsWrapper}>
+            <ul className={styles.searchResultsList}>
+              <li className={`${styles.searchResultsItem} `} onClick={this.colorState}>
+                Hoboken, NJ <span>US</span>
+              </li>
+              <hr></hr>
+              <li className={`${styles.searchResultsItem}`} onClick={this.colorState}>
+                New York, NY <span>US</span>
+              </li>
+              <hr></hr>
+              <li className={`${styles.searchResultsItem}`} onClick={this.colorState}>
+                Cupertino, CA <span>US</span>
+              </li>
+            </ul>
+          </div>
+        )}
         {this.props.errorMsg?.length > 0 && (
           <div className={styles.errorContainer}>
             <h3>Error</h3>
             <span>{this.props.errorMsg}</span>
           </div>
         )}
-
-        <div className={styles.searchResultsWrapper}>
-          <ul className={styles.searchResultsList}>
-            <li className={styles.searchResultsItem}>Hoboken, NJ US</li>
-            <hr></hr>
-            <li className={styles.searchResultsItem}>New York, NY US</li>
-            <hr></hr>
-            <li className={styles.searchResultsItem}>Cupertino, CA US</li>
-          </ul>
-        </div>
       </div>
     );
   }
