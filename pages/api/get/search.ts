@@ -23,9 +23,11 @@ export default async (req, res) => {
     return throwError(res);
   }
 
-  const trimmedSearch = Array.from(
-    filter(cityRes, (obj) => obj.name.toLowerCase().includes(reqCityInput.toLowerCase()), 3)
-  );
+  // const trimmedSearch = Array.from(
+  //   filter(cityRes, (obj) => obj.name.toLowerCase().includes(reqCityInput.toLowerCase()), 3)
+  // );
+
+  const trimmedSearch = Array.from(filter(cityRes, (obj) => match(obj.name, reqCityInput), 3));
 
   res.statusCode = 200;
   res.json({ suggestions: trimmedSearch });
@@ -49,4 +51,10 @@ function* filter(array, condition, maxSize) {
     }
     i++;
   }
+}
+
+function match(cityName, input) {
+  let matched = 0;
+  if (cityName.match(new RegExp("\\b" + input + ".*", "i"))) matched = 1;
+  return matched;
 }
