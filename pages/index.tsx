@@ -12,13 +12,13 @@ export default class Home extends Component<any, any> {
     super(props);
     this.state = {
       weatherLookup: {
+        id: 0,
         city: "",
         location: {
           lat: 0,
           long: 0,
         },
       },
-      placeholder: "Type city or use location",
       errorMsg: "",
       weatherData: {
         temp: {
@@ -43,18 +43,32 @@ export default class Home extends Component<any, any> {
         cityId: 0,
         coords: { lat: 0, long: 0 },
       },
-      tempMode: "F",
       userSearched: false,
       loading: false,
+      search: {
+        results: [],
+      },
     };
   }
 
   handleSearch = async (e) => {
-    e.preventDefault();
-    const elementID = e.currentTarget.id;
-    this.setState({ loading: true, userSearched: true });
+    let element = null;
 
-    if (elementID === "location") {
+    if (typeof e !== "number") {
+      e.preventDefault();
+      element = e.currentTarget.id;
+    }
+
+    this.setState((prevState) => ({
+      loading: true,
+      userSearched: true,
+      search: {
+        ...prevState.search,
+        results: [],
+      },
+    }));
+
+    if (element === "location") {
       await this.handleLocation()
         .then((pos) => {
           this.getCoor(pos);
@@ -65,12 +79,12 @@ export default class Home extends Component<any, any> {
         });
 
       await this.getData("coord");
-      await this.getStateData();
+    } else if (typeof e === "number") {
+      await this.getData("id");
     } else {
       const searchField = document.getElementById("weatherLookupField") as HTMLInputElement;
       if (searchField.value !== "") {
         await this.getData("city");
-        await this.getStateData();
       } else {
         this.setState({
           errorMsg: "Please provide a city name or use location.",
@@ -78,13 +92,25 @@ export default class Home extends Component<any, any> {
         return;
       }
     }
-
+    await this.getStateData();
     this.determineIcon();
-    this.setState({
+
+    this.setState((prevState) => ({
       loading: false,
-    });
+    }));
     const forms = document.getElementById("weatherLookupForm") as HTMLFormElement;
     forms.reset();
+  };
+
+  handleSuggestions = async (cityId) => {
+    await this.setState((prevState) => ({
+      weatherLookup: {
+        ...prevState.weatherLookup,
+        id: cityId,
+      },
+    }));
+
+    this.handleSearch(cityId);
   };
 
   handleLocation = () => {
@@ -102,13 +128,52 @@ export default class Home extends Component<any, any> {
     }
   };
 
-  handleUserInput = (e) => {
+  handleUserInput = async (e) => {
     this.setState((prevState) => ({
       weatherLookup: {
         ...prevState.weatherLookup,
         city: e.target.value,
       },
     }));
+    //if (e.target.value !== "") {
+    this.getSuggestions(e.target.value);
+    // } else {
+    //   this.setState((prevState) => ({
+    //     search: {
+    //       ...prevState.search,
+    //       results: [],
+    //     },
+    //   }));
+    // }
+  };
+
+  getSuggestions = async (query) => {
+    try {
+      const apiUrl = `${process.env.API_ENDPOINT}/get/search?city=${query}`;
+      const response = await fetch(apiUrl, {
+        method: "GET",
+      });
+
+      if (response.status !== 200) {
+        // We have an error so just set state to nothing
+        return;
+      }
+
+      await this.setSuggestions(response);
+    } catch (err) {
+      console.error(new Error("Unable to find state name."));
+    }
+  };
+
+  setSuggestions = async (response) => {
+    await response.json().then((data) => {
+      this.setState((prevState) => ({
+        search: {
+          ...prevState.search,
+          results: data.suggestions,
+        },
+      }));
+    });
   };
 
   getCoor = (pos) => {
@@ -192,6 +257,8 @@ export default class Home extends Component<any, any> {
       let apiUrl = `${process.env.API_ENDPOINT}/get/current-weather/location?`;
       if (mode === "city") {
         apiUrl += `city=${this.state.weatherLookup.city}`;
+      } else if (mode === "id") {
+        apiUrl += `id=${this.state.weatherLookup.id}`;
       } else {
         apiUrl += `lat=${this.state.weatherLookup.location.lat}&lon=${this.state.weatherLookup.location.long}`;
       }
@@ -293,11 +360,15 @@ export default class Home extends Component<any, any> {
   };
 
   resetApp = () => {
-    this.setState({
+    this.setState((prevState) => ({
       errorMsg: "",
       userSearched: false,
       loading: false,
-    });
+      search: {
+        ...prevState.search,
+        results: [],
+      },
+    }));
   };
 
   resetError = () => {
@@ -319,18 +390,17 @@ export default class Home extends Component<any, any> {
             <WelcomeHeroBanner resetApp={this.resetApp} />
 
             <Search
-              handleLocation={this.handleLocation}
               handleSearch={this.handleSearch}
               handleUserInput={this.handleUserInput}
+              handleSuggestions={this.handleSuggestions}
               errorMsg={this.state.errorMsg}
-              placeholder={this.state.placeholder}
+              search={this.state.search}
             />
 
             {this.state.errorMsg === "" && this.state.userSearched && (
               <WeatherCard
                 weatherData={this.state.weatherData}
                 weatherLookup={this.state.weatherLookup}
-                tempMode={this.state.tempMode}
                 loading={this.state.loading}
               />
             )}

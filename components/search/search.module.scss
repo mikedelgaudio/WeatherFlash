@@ -1,4 +1,7 @@
+$dropdown-border-radius: 25px;
+
 .searchForm {
+  position: relative;
   input[type="text"] {
     width: 100%;
     border: none;
@@ -10,6 +13,9 @@
   }
   input[type="text"]:focus {
     color: var(--dark-bg);
+    box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(190, 190, 190, 0.6);
+    border: 2px solid var(--light-gray);
+    outline: none;
   }
 
   label {
@@ -34,5 +40,48 @@
     margin: 1rem;
     border-radius: 10px;
     padding: 1rem;
+  }
+
+  .searchResultsWrapper {
+    z-index: 1;
+    position: absolute;
+    width: 100%;
+    display: block;
+    background-color: #f7f7f7;
+    border: 1px solid #00000047;
+    border-top: none;
+    border-bottom-left-radius: $dropdown-border-radius;
+    border-bottom-right-radius: $dropdown-border-radius;
+  }
+
+  .searchResultsList {
+    list-style: none;
+    font-weight: 500;
+    margin-bottom: 0;
+    padding-left: 0;
+  }
+
+  .searchResultsItem {
+    padding: 1em 0.75em 1em 0.75em;
+    display: flex;
+    justify-content: space-between;
+    span {
+      font-weight: 300;
+    }
+
+    &:not(:last-child) {
+      border-bottom: 1px solid #dadada;
+    }
+
+    &:hover,
+    &.selected {
+      cursor: pointer;
+      background-color: #ececec;
+      box-shadow: 0px 3px 7px 0px #0000004d inset;
+      &:last-child {
+        border-bottom-left-radius: $dropdown-border-radius;
+        border-bottom-right-radius: $dropdown-border-radius;
+      }
+    }
   }
 }
