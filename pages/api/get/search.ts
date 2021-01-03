@@ -26,7 +26,7 @@ export default async (req, res) => {
   );
 
   res.statusCode = 200;
-  res.json({ results: trimmedSearch });
+  res.json({ suggestions: trimmedSearch });
 };
 
 function throwError(res) {

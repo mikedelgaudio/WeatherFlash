@@ -23,7 +23,7 @@ class Search extends Component<any, any> {
           tabIndex={index + 1}
         >
           {result.name}
-          {result.state ? ", " + result.state : ""} <span>{result.country}</span>
+          {result.state ? ", " + result.state : ""} <span>Country: {result.country}</span>
         </li>
       );
     });

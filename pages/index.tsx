@@ -45,39 +45,7 @@ export default class Home extends Component<any, any> {
       userSearched: false,
       loading: false,
       search: {
-        query: "",
-        results: [
-          {
-            id: 4797041,
-            name: "Alderson",
-            state: "WV",
-            country: "US",
-            coord: {
-              lon: -80.642021,
-              lat: 37.725948,
-            },
-          },
-          {
-            id: 4797021,
-            name: "Alderson",
-            state: "WV",
-            country: "US",
-            coord: {
-              lon: -80.642021,
-              lat: 37.725948,
-            },
-          },
-          {
-            id: 4797001,
-            name: "Alderson",
-            state: "WV",
-            country: "US",
-            coord: {
-              lon: -80.642021,
-              lat: 37.725948,
-            },
-          },
-        ],
+        results: [],
       },
     };
   }
@@ -137,7 +105,7 @@ export default class Home extends Component<any, any> {
     }
   };
 
-  handleUserInput = (e) => {
+  handleUserInput = async (e) => {
     this.setState((prevState) => ({
       weatherLookup: {
         ...prevState.weatherLookup,
@@ -145,7 +113,47 @@ export default class Home extends Component<any, any> {
       },
     }));
 
-    // Call API and set response
+    if (e.target.value !== "") {
+      // Call API and set response
+      this.getSuggestions(e.target.value);
+    } else {
+      this.setState((prevState) => ({
+        search: {
+          ...prevState.search,
+          results: [],
+        },
+      }));
+    }
+  };
+
+  getSuggestions = async (query) => {
+    try {
+      const apiUrl = `${process.env.API_ENDPOINT}/get/search?city=${query}`;
+      console.log(apiUrl);
+      const response = await fetch(apiUrl, {
+        method: "GET",
+      });
+
+      if (response.status !== 200) {
+        // We have an error so just set state to nothing
+        return;
+      }
+
+      await this.setSuggestions(response);
+    } catch (err) {
+      console.error(new Error("Unable to find state name."));
+    }
+  };
+
+  setSuggestions = async (response) => {
+    await response.json().then((data) => {
+      this.setState((prevState) => ({
+        search: {
+          ...prevState.search,
+          results: data.suggestions,
+        },
+      }));
+    });
   };
 
   getCoor = (pos) => {
