@@ -5,9 +5,12 @@ export default async (req, res) => {
 
   let search: string = "";
 
-  if (usingCity(req)) {
+  if (req.query.city) {
     const city = req.query.city;
     search = `q=${city}`;
+  } else if (req.query.id) {
+    const id = req.query.id;
+    search = `id=${id}`;
   } else {
     const lat = req.query.lat;
     const lon = req.query.lon;
@@ -20,14 +23,6 @@ export default async (req, res) => {
   res.statusCode = fetched.status;
   res.json(json);
 };
-
-function usingCity(req): boolean {
-  if (req.query.city) {
-    return true;
-  } else {
-    return false;
-  }
-}
 
 function throwError(res) {
   res.statusCode = 400;

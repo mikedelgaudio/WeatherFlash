@@ -18,7 +18,7 @@ class Search extends Component<any, any> {
       return (
         <li
           className={`${styles.searchResultsItem}`}
-          onClick={this.props.handleSuggestions}
+          onClick={() => this.props.handleSuggestions(result.id)}
           key={result.id}
           tabIndex={index + 1}
         >

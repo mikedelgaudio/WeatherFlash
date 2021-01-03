@@ -88,7 +88,9 @@ export default class Home extends Component<any, any> {
     forms.reset();
   };
 
-  handleSuggestions = (e) => {};
+  handleSuggestions = (cityId) => {
+    console.log(cityId);
+  };
 
   handleLocation = () => {
     if (navigator.geolocation) {
