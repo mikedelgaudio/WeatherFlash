@@ -6,7 +6,7 @@ export default class WeatherCard extends Component<any, any> {
   constructor(props) {
     super(props);
     this.state = {
-      tempMode: this.props.tempMode,
+      tempMode: "F",
     };
   }
 
@@ -45,13 +45,12 @@ export default class WeatherCard extends Component<any, any> {
     return arr[val % 16];
   };
 
-  // /https://stackoverflow.com/questions/49497270/autocomplete-only-city-name-list-using-google-maps-api
-
   displayCard = () => {
     return (
       <div>
         <h1 className={styles.currentlyIn}>
-          Currently in {this.props.weatherData.cityName} {this.props.weatherData.stateName}
+          Currently in {this.props.weatherData.cityName}
+          {this.props.weatherData.stateName ? ", " + this.props.weatherData.stateName : ""}
         </h1>
         <div className="row justify-content-center">
           <div className={styles.todayWrapper}>
@@ -60,14 +59,14 @@ export default class WeatherCard extends Component<any, any> {
               <div className="row m-0 justify-content-center align-items-center">
                 <h2>
                   {this.props.weatherData.temp.current.toFixed()}&deg;
-                  {this.props.tempMode}
+                  {this.state.tempMode}
                 </h2>
                 <div className="col">
                   <h3 className="font-weight-light">
-                    {this.props.weatherData.temp.high.toFixed()}&deg;{this.props.tempMode}
+                    {this.props.weatherData.temp.high.toFixed()}&deg;{this.state.tempMode}
                   </h3>
                   <h3 className="font-weight-light">
-                    {this.props.weatherData.temp.low.toFixed()}&deg;{this.props.tempMode}
+                    {this.props.weatherData.temp.low.toFixed()}&deg;{this.state.tempMode}
                   </h3>
                 </div>
               </div>
