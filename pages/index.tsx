@@ -338,11 +338,15 @@ export default class Home extends Component<any, any> {
   };
 
   resetApp = () => {
-    this.setState({
+    this.setState((prevState) => ({
       errorMsg: "",
       userSearched: false,
       loading: false,
-    });
+      search: {
+        ...prevState.search,
+        results: [],
+      },
+    }));
   };
 
   resetError = () => {

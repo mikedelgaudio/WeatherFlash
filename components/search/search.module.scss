@@ -79,6 +79,7 @@ $dropdown-border-radius: 25px;
     &.selected {
       cursor: pointer;
       background-color: #ececec;
+      box-shadow: 0px 3px 7px 0px #0000004d inset;
       &:last-child {
         border-bottom-left-radius: $dropdown-border-radius;
         border-bottom-right-radius: $dropdown-border-radius;
