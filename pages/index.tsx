@@ -95,13 +95,8 @@ export default class Home extends Component<any, any> {
     await this.getStateData();
     this.determineIcon();
 
-    // why do we need to clear the results multiple times...
     this.setState((prevState) => ({
       loading: false,
-      search: {
-        ...prevState.search,
-        results: [],
-      },
     }));
     const forms = document.getElementById("weatherLookupForm") as HTMLFormElement;
     forms.reset();
@@ -140,23 +135,21 @@ export default class Home extends Component<any, any> {
         city: e.target.value,
       },
     }));
-    //https://stackoverflow.com/questions/26298500/stop-pending-async-function-in-javascript HOW TO FIX PENDING ASYNC
-    if (e.target.value !== "") {
-      this.getSuggestions(e.target.value);
-    } else {
-      this.setState((prevState) => ({
-        search: {
-          ...prevState.search,
-          results: [],
-        },
-      }));
-    }
+    //if (e.target.value !== "") {
+    this.getSuggestions(e.target.value);
+    // } else {
+    //   this.setState((prevState) => ({
+    //     search: {
+    //       ...prevState.search,
+    //       results: [],
+    //     },
+    //   }));
+    // }
   };
 
   getSuggestions = async (query) => {
     try {
       const apiUrl = `${process.env.API_ENDPOINT}/get/search?city=${query}`;
-      console.log(apiUrl);
       const response = await fetch(apiUrl, {
         method: "GET",
       });

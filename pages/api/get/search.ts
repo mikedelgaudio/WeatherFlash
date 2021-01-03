@@ -9,7 +9,9 @@ export default async (req, res) => {
   const reqCityInput = req.query.city;
 
   if (!reqCityInput) {
-    return throwError(res);
+    res.statusCode = 200;
+    res.json({ suggestions: [] });
+    return;
   }
 
   let cityRes = [];
