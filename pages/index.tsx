@@ -12,6 +12,7 @@ export default class Home extends Component<any, any> {
     super(props);
     this.state = {
       weatherLookup: {
+        id: 0,
         city: "",
         location: {
           lat: 0,
@@ -51,11 +52,23 @@ export default class Home extends Component<any, any> {
   }
 
   handleSearch = async (e) => {
-    e.preventDefault();
-    const elementID = e.currentTarget.id;
-    this.setState({ loading: true, userSearched: true });
+    let element = null;
 
-    if (elementID === "location") {
+    if (typeof e !== "number") {
+      e.preventDefault();
+      element = e.currentTarget.id;
+    }
+
+    this.setState((prevState) => ({
+      loading: true,
+      userSearched: true,
+      search: {
+        ...prevState.search,
+        results: [],
+      },
+    }));
+
+    if (element === "location") {
       await this.handleLocation()
         .then((pos) => {
           this.getCoor(pos);
@@ -66,12 +79,12 @@ export default class Home extends Component<any, any> {
         });
 
       await this.getData("coord");
-      await this.getStateData();
+    } else if (typeof e === "number") {
+      await this.getData("id");
     } else {
       const searchField = document.getElementById("weatherLookupField") as HTMLInputElement;
       if (searchField.value !== "") {
         await this.getData("city");
-        await this.getStateData();
       } else {
         this.setState({
           errorMsg: "Please provide a city name or use location.",
@@ -79,17 +92,30 @@ export default class Home extends Component<any, any> {
         return;
       }
     }
-
+    await this.getStateData();
     this.determineIcon();
-    this.setState({
+
+    // why do we need to clear the results multiple times...
+    this.setState((prevState) => ({
       loading: false,
-    });
+      search: {
+        ...prevState.search,
+        results: [],
+      },
+    }));
     const forms = document.getElementById("weatherLookupForm") as HTMLFormElement;
     forms.reset();
   };
 
-  handleSuggestions = (cityId) => {
-    console.log(cityId);
+  handleSuggestions = async (cityId) => {
+    await this.setState((prevState) => ({
+      weatherLookup: {
+        ...prevState.weatherLookup,
+        id: cityId,
+      },
+    }));
+
+    this.handleSearch(cityId);
   };
 
   handleLocation = () => {
@@ -114,9 +140,8 @@ export default class Home extends Component<any, any> {
         city: e.target.value,
       },
     }));
-
+    //https://stackoverflow.com/questions/26298500/stop-pending-async-function-in-javascript HOW TO FIX PENDING ASYNC
     if (e.target.value !== "") {
-      // Call API and set response
       this.getSuggestions(e.target.value);
     } else {
       this.setState((prevState) => ({
@@ -239,6 +264,8 @@ export default class Home extends Component<any, any> {
       let apiUrl = `${process.env.API_ENDPOINT}/get/current-weather/location?`;
       if (mode === "city") {
         apiUrl += `city=${this.state.weatherLookup.city}`;
+      } else if (mode === "id") {
+        apiUrl += `id=${this.state.weatherLookup.id}`;
       } else {
         apiUrl += `lat=${this.state.weatherLookup.location.lat}&lon=${this.state.weatherLookup.location.long}`;
       }

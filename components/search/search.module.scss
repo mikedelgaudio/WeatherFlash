@@ -43,6 +43,7 @@ $dropdown-border-radius: 25px;
   }
 
   .searchResultsWrapper {
+    z-index: 1;
     position: absolute;
     width: 100%;
     display: block;
@@ -58,9 +59,6 @@ $dropdown-border-radius: 25px;
     font-weight: 500;
     margin-bottom: 0;
     padding-left: 0;
-    hr {
-      margin: 0;
-    }
   }
 
   .searchResultsItem {
