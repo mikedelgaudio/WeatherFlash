@@ -18,7 +18,6 @@ export default class Home extends Component<any, any> {
           long: 0,
         },
       },
-      placeholder: "Type city or use location",
       errorMsg: "",
       weatherData: {
         temp: {
@@ -43,10 +42,43 @@ export default class Home extends Component<any, any> {
         cityId: 0,
         coords: { lat: 0, long: 0 },
       },
-      tempMode: "F",
       userSearched: false,
       loading: false,
-      displayDropdown: false,
+      search: {
+        query: "",
+        results: [
+          {
+            id: 4797041,
+            name: "Alderson",
+            state: "WV",
+            country: "US",
+            coord: {
+              lon: -80.642021,
+              lat: 37.725948,
+            },
+          },
+          {
+            id: 4797021,
+            name: "Alderson",
+            state: "WV",
+            country: "US",
+            coord: {
+              lon: -80.642021,
+              lat: 37.725948,
+            },
+          },
+          {
+            id: 4797001,
+            name: "Alderson",
+            state: "WV",
+            country: "US",
+            coord: {
+              lon: -80.642021,
+              lat: 37.725948,
+            },
+          },
+        ],
+      },
     };
   }
 
@@ -88,6 +120,8 @@ export default class Home extends Component<any, any> {
     forms.reset();
   };
 
+  handleSuggestions = (e) => {};
+
   handleLocation = () => {
     if (navigator.geolocation) {
       return new Promise((res, rej) => {
@@ -109,16 +143,9 @@ export default class Home extends Component<any, any> {
         ...prevState.weatherLookup,
         city: e.target.value,
       },
-      ...prevState.displayDropdown,
-      displayDropdown: true,
     }));
 
-    if (e.target.value === "") {
-      this.setState((prevState) => ({
-        ...prevState.displayDropdown,
-        displayDropdown: false,
-      }));
-    }
+    // Call API and set response
   };
 
   getCoor = (pos) => {
@@ -329,19 +356,17 @@ export default class Home extends Component<any, any> {
             <WelcomeHeroBanner resetApp={this.resetApp} />
 
             <Search
-              handleLocation={this.handleLocation}
               handleSearch={this.handleSearch}
               handleUserInput={this.handleUserInput}
+              handleSuggestions={this.handleSuggestions}
               errorMsg={this.state.errorMsg}
-              placeholder={this.state.placeholder}
-              displayDropdown={this.state.displayDropdown}
+              search={this.state.search}
             />
 
             {this.state.errorMsg === "" && this.state.userSearched && (
               <WeatherCard
                 weatherData={this.state.weatherData}
                 weatherLookup={this.state.weatherLookup}
-                tempMode={this.state.tempMode}
                 loading={this.state.loading}
               />
             )}

@@ -6,17 +6,29 @@ import styles from "./search.module.scss";
 class Search extends Component<any, any> {
   constructor(props) {
     super(props);
+
+    this.state = {
+      placeholder: "Type city or use location",
+    };
   }
 
-  colorState = (e) => {
-    console.log(e.target);
-    e.target.classList.add(styles.selected);
-  };
-
   render() {
+    const searchSuggestions = this.props.search.results.map((result) => {
+      return (
+        <li
+          className={`${styles.searchResultsItem}`}
+          onClick={this.props.handleSuggestions}
+          key={result.id}
+        >
+          {result.name}
+          {result.state ? ", " + result.state : ""} <span>{result.country}</span>
+        </li>
+      );
+    });
+
     return (
       <div className={styles.searchForm}>
-        <form onSubmit={this.props.handleSearch} id="weatherLookupForm">
+        <form onSubmit={this.props.handleSearch} id="weatherLookupForm" autoComplete="off">
           <div className="input-group flex-nowrap">
             <label htmlFor="weatherLookup">{this.props.placeholder}</label>
             <input
@@ -24,7 +36,7 @@ class Search extends Component<any, any> {
               type="text"
               id="weatherLookupField"
               className="form-control"
-              placeholder={this.props.placeholder}
+              placeholder={this.state.placeholder}
               onChange={this.props.handleUserInput}
             />
 
@@ -53,21 +65,9 @@ class Search extends Component<any, any> {
           </div>
         </form>
 
-        {this.props.displayDropdown && (
+        {this.props.search.results.length > 0 && (
           <div className={styles.searchResultsWrapper}>
-            <ul className={styles.searchResultsList}>
-              <li className={`${styles.searchResultsItem} `} onClick={this.colorState}>
-                Hoboken, NJ <span>US</span>
-              </li>
-              <hr></hr>
-              <li className={`${styles.searchResultsItem}`} onClick={this.colorState}>
-                New York, NY <span>US</span>
-              </li>
-              <hr></hr>
-              <li className={`${styles.searchResultsItem}`} onClick={this.colorState}>
-                Cupertino, CA <span>US</span>
-              </li>
-            </ul>
+            <ul className={styles.searchResultsList}>{searchSuggestions}</ul>
           </div>
         )}
         {this.props.errorMsg?.length > 0 && (
