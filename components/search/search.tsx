@@ -13,12 +13,14 @@ class Search extends Component<any, any> {
   }
 
   render() {
-    const searchSuggestions = this.props.search.results.map((result) => {
+    // tabbing not working as expected
+    const searchSuggestions = this.props.search.results.map((result, index) => {
       return (
         <li
           className={`${styles.searchResultsItem}`}
           onClick={this.props.handleSuggestions}
           key={result.id}
+          tabIndex={index + 1}
         >
           {result.name}
           {result.state ? ", " + result.state : ""} <span>{result.country}</span>
@@ -30,7 +32,7 @@ class Search extends Component<any, any> {
       <div className={styles.searchForm}>
         <form onSubmit={this.props.handleSearch} id="weatherLookupForm" autoComplete="off">
           <div className="input-group flex-nowrap">
-            <label htmlFor="weatherLookup">{this.props.placeholder}</label>
+            <label htmlFor="weatherLookup">{this.state.placeholder}</label>
             <input
               name="weatherLookup"
               type="text"
