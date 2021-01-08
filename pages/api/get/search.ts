@@ -23,11 +23,11 @@ export default async (req, res) => {
     return throwError(res);
   }
 
-  // const trimmedSearch = Array.from(
-  //   filter(cityRes, (obj) => obj.name.toLowerCase().includes(reqCityInput.toLowerCase()), 3)
-  // );
-
+  //Search City
   const trimmedSearch = Array.from(filter(cityRes, (obj) => match(obj.name, reqCityInput), 3));
+
+  //Search with State
+  console.log(parseState(reqCityInput));
 
   res.statusCode = 200;
   res.json({ suggestions: trimmedSearch });
@@ -57,4 +57,23 @@ function match(cityName, input) {
   let matched = 0;
   if (cityName.match(new RegExp("\\b" + input + ".*", "i"))) matched = 1;
   return matched;
+}
+
+function parseState(input) {
+  let x = input.split("");
+  let state = "";
+  const regEx = /^[A-Za-z]+$/;
+  for (let i = 0; i < x.length; i++) {
+    try {
+      if (x[i] === " " && regEx.test(x[i + 1]) && regEx.test(x[i + 2])) {
+        state += x[i + 1];
+        state += x[i + 2];
+        break;
+      }
+    } catch (e) {
+      break;
+    }
+  }
+
+  return state;
 }
