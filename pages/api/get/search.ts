@@ -1,6 +1,14 @@
 import { promises as fs } from "fs";
 import path from "path";
 
+interface Location {
+  id?: number;
+  name?: string;
+  state?: string;
+  country?: string;
+  coord?: { lon?: number; lat?: number };
+}
+
 export default async (req, res) => {
   if (req.method !== "GET") {
     return throwError(res);
@@ -23,11 +31,10 @@ export default async (req, res) => {
     return throwError(res);
   }
 
-  //Search City
-  const trimmedSearch = Array.from(filter(cityRes, (obj) => match(obj.name, reqCityInput), 3));
+  const parsedLocation = parseState(reqCityInput);
 
-  //Search with State
-  console.log(parseState(reqCityInput));
+  //Search City
+  const trimmedSearch = Array.from(filter(cityRes, (obj) => match(obj, parsedLocation), 3));
 
   res.statusCode = 200;
   res.json({ suggestions: trimmedSearch });
@@ -53,27 +60,49 @@ function* filter(array, condition, maxSize) {
   }
 }
 
-function match(cityName, input) {
+function match(masterLocations: Location, parsedLocation: Location): number {
   let matched = 0;
-  if (cityName.match(new RegExp("\\b" + input + ".*", "i"))) matched = 1;
+  try {
+    if (masterLocations.name.match(new RegExp("\\b" + parsedLocation.name + `.*`, "i"))) {
+      if (
+        parsedLocation.state &&
+        masterLocations.state.match(new RegExp("\\b" + parsedLocation.state + `.*`, "i"))
+      ) {
+        console.log("State match");
+        matched = 1;
+      } else {
+        console.log("State NO MATCH");
+        matched = 1;
+      }
+    }
+  } catch (e) {
+    console.error(e);
+  }
   return matched;
 }
 
-function parseState(input) {
-  let x = input.split("");
+function parseState(input): Location {
+  let splitInput = input.split("");
   let state = "";
-  const regEx = new RegExp(`\\^[A-Za-z]+$`, "g");
-  for (let i = 0; i < x.length; i++) {
+  let city = "";
+  const regEx = /^[A-Za-z]+$/;
+  for (let i = 0; i < splitInput.length; i++) {
     try {
-      if (x[i] === " " && regEx.test(x[i + 1]) && regEx.test(x[i + 2])) {
-        state += x[i + 1];
-        state += x[i + 2];
+      if (splitInput[i] === " " && regEx.test(splitInput[i + 1]) && regEx.test(splitInput[i + 2])) {
+        state += splitInput[i + 1];
+        state += splitInput[i + 2];
         break;
+      } else {
+        // it is a city
+        city += splitInput[i];
       }
     } catch (e) {
       break;
     }
   }
 
-  return state;
+  return {
+    name: city,
+    state: state,
+  };
 }
