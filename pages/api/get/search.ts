@@ -62,7 +62,7 @@ function match(cityName, input) {
 function parseState(input) {
   let x = input.split("");
   let state = "";
-  const regEx = /^[A-Za-z]+$/;
+  const regEx = new RegExp(`\\^[A-Za-z]+$`, "g");
   for (let i = 0; i < x.length; i++) {
     try {
       if (x[i] === " " && regEx.test(x[i + 1]) && regEx.test(x[i + 2])) {
