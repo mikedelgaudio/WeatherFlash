@@ -34,7 +34,10 @@ export default async (req, res) => {
   const parsedLocation = parseState(reqCityInput);
 
   //Search City
-  const trimmedSearch = Array.from(filter(cityRes, (obj) => match(obj, parsedLocation), 3));
+  let trimmedSearch = Array.from(filter(cityRes, (obj) => match(obj, parsedLocation, "n"), 3));
+  if (parsedLocation.state !== "") {
+    trimmedSearch = Array.from(filter(trimmedSearch, (obj) => match(obj, parsedLocation, "s"), 3));
+  }
 
   res.statusCode = 200;
   res.json({ suggestions: trimmedSearch });
@@ -60,20 +63,19 @@ function* filter(array, condition, maxSize) {
   }
 }
 
-function match(masterLocations: Location, parsedLocation: Location): number {
+/**
+ *
+ * @param masterLocations
+ * @param parsedLocation
+ * @param flags n = filter by city; s = filter by state
+ */
+function match(masterLocations: Location, parsedLocation: Location, flags: string): number {
   let matched = 0;
+  const masterSearchArray = flags === "s" ? masterLocations.state : masterLocations.name;
+  const searchTerm = flags === "s" ? parsedLocation.state : parsedLocation.name;
   try {
-    if (masterLocations.name.match(new RegExp("\\b" + parsedLocation.name + `.*`, "i"))) {
-      if (
-        parsedLocation.state &&
-        masterLocations.state.match(new RegExp("\\b" + parsedLocation.state + `.*`, "i"))
-      ) {
-        console.log("State match");
-        matched = 1;
-      } else {
-        console.log("State NO MATCH");
-        matched = 1;
-      }
+    if (masterSearchArray.match(new RegExp("\\b" + searchTerm + `.*`, "i"))) {
+      matched = 1;
     }
   } catch (e) {
     console.error(e);
@@ -94,15 +96,16 @@ function parseState(input): Location {
         break;
       } else {
         // it is a city
-        city += splitInput[i];
+        if (splitInput[i] !== ",") city += splitInput[i];
       }
     } catch (e) {
       break;
     }
   }
 
+  //regex not working shouldnt need the bottom ternary
   return {
     name: city,
-    state: state,
+    state: state === "undefinedundefined" ? "" : state,
   };
 }
