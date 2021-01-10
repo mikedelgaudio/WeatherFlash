@@ -135,16 +135,7 @@ export default class Home extends Component<any, any> {
         city: e.target.value,
       },
     }));
-    //if (e.target.value !== "") {
     this.getSuggestions(e.target.value);
-    // } else {
-    //   this.setState((prevState) => ({
-    //     search: {
-    //       ...prevState.search,
-    //       results: [],
-    //     },
-    //   }));
-    // }
   };
 
   getSuggestions = async (query) => {

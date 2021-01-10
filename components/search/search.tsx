@@ -10,6 +10,7 @@ class Search extends Component<any, any> {
     this.state = {
       placeholder: "Type city or use location",
       cursor: 0,
+      id: 0,
     };
   }
 
@@ -33,11 +34,9 @@ class Search extends Component<any, any> {
     }
 
     if (e.key === "Enter") {
-      console.log(e.target);
-
-      const x = document.querySelector(`#selected`);
-      //this.props.handleSuggestions();
-      console.log(x);
+      const selected = document.querySelector(`#selected`);
+      const cityId = selected.getAttribute("city-id");
+      this.props.handleSuggestions(parseInt(cityId));
     }
   };
 
@@ -51,9 +50,10 @@ class Search extends Component<any, any> {
           onKeyPress={(e) =>
             e.key === "Enter" || cursor === index ? this.props.handleSuggestions(result.id) : null
           }
+          id={cursor === index ? "selected" : ""}
           key={result.id}
-          id={`${cursor === index ? "selected" : ""}`}
           tabIndex={0}
+          city-id={result.id}
         >
           {result.name}
           {result.state ? ", " + result.state : ""} <span>Country: {result.country}</span>
