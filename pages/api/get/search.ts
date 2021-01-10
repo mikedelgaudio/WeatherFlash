@@ -35,6 +35,8 @@ export default async (req, res) => {
 
   //Search City
   let trimmedSearch = Array.from(filter(cityRes, (obj) => match(obj, parsedLocation, "n"), 3));
+
+  //Search State
   if (parsedLocation.state !== "") {
     trimmedSearch = Array.from(filter(trimmedSearch, (obj) => match(obj, parsedLocation, "s"), 3));
   }
@@ -84,28 +86,26 @@ function match(masterLocations: Location, parsedLocation: Location, flags: strin
 }
 
 function parseState(input): Location {
-  let splitInput = input.split("");
+  let splitInput = input.trim().split("");
   let state = "";
   let city = "";
-  const regEx = /^[A-Za-z]+$/;
   for (let i = 0; i < splitInput.length; i++) {
     try {
-      if (splitInput[i] === " " && regEx.test(splitInput[i + 1]) && regEx.test(splitInput[i + 2])) {
+      if (splitInput[i] === " " && splitInput[i + 3] === undefined) {
+        console.log("here");
         state += splitInput[i + 1];
         state += splitInput[i + 2];
         break;
       } else {
-        // it is a city
         if (splitInput[i] !== ",") city += splitInput[i];
       }
     } catch (e) {
+      console.error(e);
       break;
     }
   }
-
-  //regex not working shouldnt need the bottom ternary
   return {
     name: city,
-    state: state === "undefinedundefined" ? "" : state,
+    state: state,
   };
 }
