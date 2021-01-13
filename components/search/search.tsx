@@ -33,11 +33,11 @@ class Search extends Component<any, any> {
       }));
     }
 
-    if (e.key === "Enter") {
-      const selected = document.querySelector(`#selected`);
-      const cityId = selected.getAttribute("city-id");
-      this.props.handleSuggestions(parseInt(cityId));
-    }
+    // if (e.key === "Enter") {
+    //   const selected = document.querySelector(`#selected`);
+    //   const cityId = selected.getAttribute("city-id");
+    //   this.props.handleSuggestions(parseInt(cityId));
+    // }
   };
 
   render() {
@@ -45,12 +45,12 @@ class Search extends Component<any, any> {
     const searchSuggestions = this.props.search.results.map((result, index) => {
       return (
         <li
-          className={` ${styles.searchResultsItem} ${cursor === index ? styles.selected : null}`}
+          className={` ${styles.searchResultsItem} `}
           onClick={() => this.props.handleSuggestions(result.id)}
           onKeyPress={(e) =>
             e.key === "Enter" || cursor === index ? this.props.handleSuggestions(result.id) : null
           }
-          id={cursor === index ? "selected" : ""}
+          // id={cursor === index ? "selected" : ""}
           key={result.id}
           tabIndex={0}
           city-id={result.id}

@@ -92,7 +92,6 @@ function parseState(input): Location {
   for (let i = 0; i < splitInput.length; i++) {
     try {
       if (splitInput[i] === " " && splitInput[i + 3] === undefined) {
-        console.log("here");
         state += splitInput[i + 1];
         state += splitInput[i + 2];
         break;
