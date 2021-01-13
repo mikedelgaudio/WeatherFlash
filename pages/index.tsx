@@ -135,16 +135,7 @@ export default class Home extends Component<any, any> {
         city: e.target.value,
       },
     }));
-    //if (e.target.value !== "") {
     this.getSuggestions(e.target.value);
-    // } else {
-    //   this.setState((prevState) => ({
-    //     search: {
-    //       ...prevState.search,
-    //       results: [],
-    //     },
-    //   }));
-    // }
   };
 
   getSuggestions = async (query) => {
@@ -345,6 +336,9 @@ export default class Home extends Component<any, any> {
       await this.setStateData(response);
     } catch (err) {
       console.error(new Error("Unable to find state name."));
+      this.setState({
+        errorMsg: `Sorry, an unexpected error occured. Please try again later.`,
+      });
     }
   };
 
@@ -415,12 +409,13 @@ export default class Home extends Component<any, any> {
 
 /**
  * <!-- Global site tag (gtag.js) - Google Analytics -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-8V07L1WK67"></script>
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-H7JJPMJC5Q"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
   gtag('js', new Date());
 
-  gtag('config', 'G-8V07L1WK67');
+  gtag('config', 'G-H7JJPMJC5Q');
 </script>
  */

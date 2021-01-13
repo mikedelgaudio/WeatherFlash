@@ -1,6 +1,14 @@
 import { promises as fs } from "fs";
 import path from "path";
 
+interface Location {
+  id?: number;
+  name?: string;
+  state?: string;
+  country?: string;
+  coord?: { lon?: number; lat?: number };
+}
+
 export default async (req, res) => {
   if (req.method !== "GET") {
     return throwError(res);
@@ -23,11 +31,15 @@ export default async (req, res) => {
     return throwError(res);
   }
 
-  // const trimmedSearch = Array.from(
-  //   filter(cityRes, (obj) => obj.name.toLowerCase().includes(reqCityInput.toLowerCase()), 3)
-  // );
+  const parsedLocation = parseState(reqCityInput);
 
-  const trimmedSearch = Array.from(filter(cityRes, (obj) => match(obj.name, reqCityInput), 3));
+  //Search City
+  let trimmedSearch = Array.from(filter(cityRes, (obj) => match(obj, parsedLocation, "n"), 3));
+
+  //Search State
+  if (parsedLocation.state !== "") {
+    trimmedSearch = Array.from(filter(trimmedSearch, (obj) => match(obj, parsedLocation, "s"), 3));
+  }
 
   res.statusCode = 200;
   res.json({ suggestions: trimmedSearch });
@@ -53,8 +65,46 @@ function* filter(array, condition, maxSize) {
   }
 }
 
-function match(cityName, input) {
+/**
+ *
+ * @param masterLocations
+ * @param parsedLocation
+ * @param flags n = filter by city; s = filter by state
+ */
+function match(masterLocations: Location, parsedLocation: Location, flags: string): number {
   let matched = 0;
-  if (cityName.match(new RegExp("\\b" + input + ".*", "i"))) matched = 1;
+  const masterSearchArray = flags === "s" ? masterLocations.state : masterLocations.name;
+  const searchTerm = flags === "s" ? parsedLocation.state : parsedLocation.name;
+  try {
+    if (masterSearchArray.match(new RegExp("\\b" + searchTerm + `.*`, "i"))) {
+      matched = 1;
+    }
+  } catch (e) {
+    console.error(e);
+  }
   return matched;
+}
+
+function parseState(input): Location {
+  let splitInput = input.trim().split("");
+  let state = "";
+  let city = "";
+  for (let i = 0; i < splitInput.length; i++) {
+    try {
+      if (splitInput[i] === " " && splitInput[i + 3] === undefined) {
+        state += splitInput[i + 1];
+        state += splitInput[i + 2];
+        break;
+      } else {
+        if (splitInput[i] !== ",") city += splitInput[i];
+      }
+    } catch (e) {
+      console.error(e);
+      break;
+    }
+  }
+  return {
+    name: city,
+    state: state,
+  };
 }
