@@ -336,6 +336,9 @@ export default class Home extends Component<any, any> {
       await this.setStateData(response);
     } catch (err) {
       console.error(new Error("Unable to find state name."));
+      this.setState({
+        errorMsg: `Sorry, an unexpected error occured. Please try again later.`,
+      });
     }
   };
 

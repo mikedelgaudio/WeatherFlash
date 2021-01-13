@@ -1,4 +1,4 @@
-FROM node:alpine
+FROM node:alpine 
 RUN mkdir -p /usr/src
 WORKDIR /usr/src
 ARG arg_API_KEY
@@ -11,6 +11,7 @@ RUN yarn install --pure-lockfile
 RUN yarn run build
 EXPOSE 80
 EXPOSE 443
+USER node
 CMD yarn run start 
 
 # use --build-arg api_API_KEY=XYZ
