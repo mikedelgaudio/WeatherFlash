@@ -9,18 +9,51 @@ class Search extends Component<any, any> {
 
     this.state = {
       placeholder: "Type city or use location",
+      cursor: 0,
+      id: 0,
     };
   }
 
+  handleArrowKeys = (e) => {
+    const { cursor } = this.state;
+
+    if (e.target.value === "") {
+      this.setState((prevState) => ({
+        cursor: 0,
+      }));
+    }
+
+    if (e.keyCode === 38 && cursor > 0) {
+      this.setState((prevState) => ({
+        cursor: prevState.cursor - 1,
+      }));
+    } else if (e.keyCode === 40 && cursor < this.props.search.results.length - 1) {
+      this.setState((prevState) => ({
+        cursor: prevState.cursor + 1,
+      }));
+    }
+
+    // if (e.key === "Enter") {
+    //   const selected = document.querySelector(`#selected`);
+    //   const cityId = selected.getAttribute("city-id");
+    //   this.props.handleSuggestions(parseInt(cityId));
+    // }
+  };
+
   render() {
-    // tabbing not working as expected
+    const { cursor } = this.state;
     const searchSuggestions = this.props.search.results.map((result, index) => {
       return (
         <li
-          className={`${styles.searchResultsItem}`}
+          className={` ${styles.searchResultsItem} `}
           onClick={() => this.props.handleSuggestions(result.id)}
+          onKeyPress={(e) =>
+            e.key === "Enter" || cursor === index ? this.props.handleSuggestions(result.id) : null
+          }
+          // id={cursor === index ? "selected" : ""}
           key={result.id}
-          tabIndex={index + 1}
+          tabIndex={0}
+          city-id={result.id}
         >
           {result.name}
           {result.state ? ", " + result.state : ""} <span>Country: {result.country}</span>
@@ -40,6 +73,7 @@ class Search extends Component<any, any> {
               className="form-control"
               placeholder={this.state.placeholder}
               onChange={this.props.handleUserInput}
+              onKeyDown={this.handleArrowKeys}
             />
 
             <div className="input-group-append">
