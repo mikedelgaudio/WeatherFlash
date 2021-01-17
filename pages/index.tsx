@@ -52,6 +52,15 @@ export default class Home extends Component<any, any> {
   }
 
   handleSearch = async (e) => {
+    if (this.state.loading) {
+      try {
+        e.preventDefault();
+      } catch (e) {
+        console.error(new Error("App was loading - rebooting"));
+        this.resetApp();
+      }
+      return;
+    }
     let element = null;
 
     if (typeof e !== "number") {
