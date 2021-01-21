@@ -1,0 +1,7 @@
+{
+  "parser": "@typescript-eslint/parser",
+  "rules": {
+    "no-console": "error",
+    "no-debugger": "error"
+  }
+}

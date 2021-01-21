@@ -1,0 +1,18 @@
+{
+  "rules": {
+    "selector-class-pattern": [
+      "^([a-z][a-z0-9]*)(-[a-z0-9]+)*$",
+      {
+        "message": "Please use dashes in your CSS-selectors."
+      }
+    ],
+    "font-family-no-duplicate-names": true,
+    "unit-no-unknown": true,
+    "property-no-unknown": true,
+    "color-no-invalid-hex": true,
+    "comment-no-empty": true,
+    "no-extra-semicolons": true,
+    "no-duplicate-at-import-rules": true,
+    "no-duplicate-selectors": true
+  }
+}
