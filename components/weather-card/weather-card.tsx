@@ -72,7 +72,7 @@ export default class WeatherCard extends Component<any, any> {
               </div>
               <h3 className="font-weight-light">
                 Feels like {this.props.weatherData.temp.feelsLike.toFixed()}&deg;
-                {this.props.tempMode}
+                {this.state.tempMode}
               </h3>
             </div>
           </div>
@@ -85,8 +85,18 @@ export default class WeatherCard extends Component<any, any> {
         <div className={styles.metricWrapper}>
           <ul className="list-group list-group-flush text-center">
             <li className="list-group-item">
-              Sunrise <Moment date={this.props.weatherData.sunrise} format="h:mm A" unix local /> -
-              Sunset <Moment date={this.props.weatherData.sunset} format="h:mm A" unix local />
+              Sunrise{" "}
+              <Moment
+                date={(this.props.weatherData.sunrise + this.props.weatherData.timezone) * 1000}
+                format="h:mm A"
+                utc
+              />{" "}
+              - Sunset{" "}
+              <Moment
+                date={(this.props.weatherData.sunset + this.props.weatherData.timezone) * 1000}
+                format="h:mm A"
+                utc
+              />
             </li>
             <li className="list-group-item">Humidity {this.props.weatherData.humidity}%</li>
             <li className="list-group-item">
