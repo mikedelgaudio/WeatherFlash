@@ -1,5 +1,7 @@
 name: Publish Docker image
 on:
+  release:
+    types: [published]
   push:
     branches:
       - production
@@ -16,3 +18,6 @@ jobs:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
           repository: mikedelgaudio/weatherflash:latest
+          build-args: |
+            arg_API_KEY=${{ secrets.API_KEY }}
+            arg_API_ENDPOINT=${{ secrets.API_ENDPOINT }}
