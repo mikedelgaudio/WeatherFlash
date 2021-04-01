@@ -1,8 +1,8 @@
 FROM node:alpine 
 RUN mkdir -p /usr/src
 WORKDIR /usr/src
-ENV API_KEY=${arg_API_KEY}
-ENV API_ENDPOINT=${arg_API_ENDPOINT}
+ENV API_KEY=YOUR_API_KEY
+ENV API_ENDPOINT=https://weatherflash.delgaudiomike.com/api
 
 COPY . /usr/src
 RUN yarn install --pure-lockfile
