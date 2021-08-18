@@ -23,7 +23,7 @@ const initialState = {
     stateName: "",
     cityId: 0,
     coords: { lat: 0, long: 0 },
-  };
+  },
 };
 
 const weatherSlice = createSlice({
@@ -31,8 +31,8 @@ const weatherSlice = createSlice({
   initialState,
   reducers: {
     changeWeatherData: (state, action) => {
-        // TODO map data results 
-        state = action.payload;
+      // TODO map data results
+      state = action.payload;
     },
   },
 });

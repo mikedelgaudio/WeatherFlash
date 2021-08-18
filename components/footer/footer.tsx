@@ -9,12 +9,10 @@ export class Footer extends Component {
   render() {
     return (
       <footer className={styles.footer}>
-        <span className="m-0">
-          Developed by{" "}
-          <a href="https://github.com/mikedelgaudio" target="_blank">
-            Mike DelGaudio
-          </a>
-        </span>
+        Designed and Developed by&nbsp;
+        <a href="https://github.com/mikedelgaudio" target="_blank">
+          Mike DelGaudio
+        </a>
       </footer>
     );
   }

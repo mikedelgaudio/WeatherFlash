@@ -19,6 +19,10 @@
 
 .logoWrap {
   cursor: pointer;
+  & > div {
+    display: flex;
+    margin: 0;
+  }
 }
 
 .icon {

@@ -1,11 +1,12 @@
 import { configureStore } from "@reduxjs/toolkit";
 import themeReducer from "./themeSlice";
-import weatherDataSlice from "./weatherDataSlice";
+import weatherDataReducer from "./weatherDataSlice";
+import weatherLookupReducer from "./weatherLookupSlice";
 
 export default configureStore({
   reducer: {
     themes: themeReducer,
-    weatherData: weatherDataSlice,
-    weatherLookup: weatherLookupSlice,
+    weatherData: weatherDataReducer,
+    weatherLookup: weatherLookupReducer,
   },
 });

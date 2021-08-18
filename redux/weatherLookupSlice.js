@@ -11,8 +11,8 @@ const initialState = {
   },
 };
 
-const weatherSlice = createSlice({
-  name: "weatherData",
+const weatherLookupSlice = createSlice({
+  name: "weatherLookup",
   initialState,
   reducers: {
     changeWeatherLookup: (state, action) => {
