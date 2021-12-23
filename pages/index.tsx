@@ -1,6 +1,5 @@
 import Head from "next/head";
 import React, { Component } from "react";
-import { isMobile } from "react-device-detect";
 import { Footer } from "../components/footer/footer";
 import Search from "../components/search/search";
 import WeatherCard from "../components/weather-card/weather-card";
@@ -193,10 +192,6 @@ export default class Home extends Component<any, any> {
     if (err.message === "User denied Geolocation") {
       this.setState({
         errorMsg: `Unable to grab location. You have denied location access.`,
-      });
-    } else if (isMobile) {
-      this.setState({
-        errorMsg: `Support for mobile location has not been implemented yet :)`,
       });
     } else {
       this.setState({

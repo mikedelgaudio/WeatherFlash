@@ -14,20 +14,18 @@ export default class WelcomeHeroBanner extends Component<any, any> {
 
   public render() {
     return (
-      <div>
-        <div onClick={this.props.resetApp} className={styles.logoWrap}>
-          <div className="d-flex m-0">
-            <h1 className={styles.title}>WeatherFlash</h1>
-            <span>
-              <FontAwesomeIcon icon={faSun} className={styles.icon} />
-            </span>
-          </div>
-
-          <div>
-            <h2 className={styles.subtitle}>{this.state.subtitle}</h2>
-          </div>
+      <header onClick={this.props.resetApp} className={styles.logoWrap}>
+        <div>
+          <h1 className={styles.title}>WeatherFlash</h1>
+          <span>
+            <FontAwesomeIcon icon={faSun} className={styles.icon} />
+          </span>
         </div>
-      </div>
+
+        <div>
+          <h2 className={styles.subtitle}>{this.state.subtitle}</h2>
+        </div>
+      </header>
     );
   }
 }
