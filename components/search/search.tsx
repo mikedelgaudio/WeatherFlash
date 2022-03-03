@@ -1,5 +1,3 @@
-import { faLocationArrow, faSearch } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Component } from "react";
 import styles from "./search.module.scss";
 
@@ -86,7 +84,7 @@ class Search extends Component<any, any> {
                 aria-label="Search"
                 onClick={this.props.handleSearch}
               >
-                <FontAwesomeIcon icon={faSearch} />
+                SEARCH ICON
               </button>
             </div>
             <div className="input-group-append">
@@ -97,7 +95,7 @@ class Search extends Component<any, any> {
                 aria-label="Find Location"
                 onClick={this.props.handleSearch}
               >
-                <FontAwesomeIcon icon={faLocationArrow} />
+                LOCATION ICON
               </button>
             </div>
           </div>
