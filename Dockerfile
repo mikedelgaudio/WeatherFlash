@@ -8,7 +8,7 @@ RUN yarn install --frozen-lockfile
 
 # Rebuild the source code only when needed
 FROM node:16.14.0-alpine AS builder
-ENV API_ENDPOINT=https://weatherflash.delgaudiomike.com/api
+ENV API_ENDPOINT=https://weatherflash.delgaudio.dev/api
 WORKDIR /app
 COPY . .
 COPY --from=deps /app/node_modules ./node_modules
