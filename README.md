@@ -1,5 +1,5 @@
 <h1 align="center">WeatherFlash</h1>
-<h3 align="center">The one stop site to get your weather in a flash!</h3>
+<h2 align="center">The one stop site to get your weather in a flash</h2>
 <p align="center">
   <img width="650" height="650" src="docs/demo.gif">
 </p>
